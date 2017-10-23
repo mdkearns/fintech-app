@@ -1,1 +1,3 @@
-
+ - Add user stories as issues (everyone)
+ - Create a list of tasks and add them to Tasks-Sprint-0.md
+ - Create a list of questions and issues related to the project vision statement and add them to questions.md (everyone)
