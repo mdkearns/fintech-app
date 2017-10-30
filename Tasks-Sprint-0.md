@@ -10,4 +10,4 @@
 
 ### Adding the first feature
 - Create user report model - Josh, Matt
-- Make page to view the user reports - Kevin, Ethan
+- Make login page - Kevin, Ethan
