@@ -14,8 +14,24 @@ def index(request):
         'registration/login.html'
     )
 
-def temp(request):
+def verify(request):
+
+    user = request.POST["uname"]
+
+    if CustomUser.objects.filter(username=user).exists():
+
+        return render(
+            request,
+            'registration/login_success.html'
+    )
+    else:
+        return render(
+            request,            
+            'registration/login.html'
+        )
+
+def logout(request):
     return render(
-        request,
-        'registration/logged_out.html'
+        request,            
+        'registration/login.html'
     )
