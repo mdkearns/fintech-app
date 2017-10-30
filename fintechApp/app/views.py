@@ -13,3 +13,9 @@ def index(request):
         request,
         'registration/login.html'
     )
+
+def temp(request):
+    return render(
+        request,
+        'registration/logged_out.html'
+    )
