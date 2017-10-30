@@ -11,5 +11,5 @@ def index(request):
     # Render the HTML template index.html with the data in the context variable
     return render(
         request,
-        'templates/registration/login.html'
+        'registration/login.html'
     )
