@@ -14,7 +14,7 @@ def index(request):
         'registration/login.html'
     )
 
-def temp(request):
+def logout(request):
     return render(
         request,
         'registration/logged_out.html'
