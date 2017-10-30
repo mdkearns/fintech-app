@@ -7,3 +7,7 @@
 - How to network the standanlone app with the web app - Matt
 - Displaying different pages for different user types - Josh
 - Different permissions for each user - Kevin
+
+### Adding the first feature
+- Create user report model - Josh, Matt
+- Make page to view the user reports - Kevin, Ethan
