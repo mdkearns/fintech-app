@@ -18,4 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-]
+    url(r'^app/', include('app.urls')),
+    url(r'^$', RedirectView.as_view(url='/app/', permanent=True)),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
