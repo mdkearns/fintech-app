@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>FinTechApp Home</h1>
+{% if user.is_authenticated %}
+  <li>User: {{ user.get_username }}</li>
+  <h6>Group:</h6>
+  {% for g in request.user.groups.all %}
+    <li>{{g}}</li>
+  {% endfor %}
+{% endif %}
+{% endblock %}

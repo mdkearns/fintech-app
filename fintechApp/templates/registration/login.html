@@ -15,14 +15,8 @@
     {% endif %}
 {% endif %}
 
-<form method="post" action="{% url 'verify' %}">
+<form method="post" action="{% url 'login' %}">
 {% csrf_token %}
-
-<label><b>Username</b></label>
-<input type="text" placeholder="Enter Username" name="uname" required>
-
-<label><b>Password</b></label>
-<input type="password" placeholder="Enter Password" name="psw" required>
 
 <div>
   <td>{{ form.username.label_tag }}</td>
@@ -39,5 +33,7 @@
 </div>
 </form>
 
+{# Assumes you setup the password_reset view in your URLconf #}
+<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
 
 {% endblock %}
