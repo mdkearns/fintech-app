@@ -48,8 +48,6 @@ def fda_authenticate(request):
 
 		usr = request.GET['username']
 		pwd = request.GET['password']
-		#valid_user = User.objects.get(username=usr)
-		
 		
 		user = authenticate(username=usr, password=pwd)
 		
@@ -57,12 +55,6 @@ def fda_authenticate(request):
 			return HttpResponse("You have logged in successfully!")
 		else:
 			return HttpResponse("Invalid Login Credentials.")
-			
-
-		# if form.is_valid():
-			# return HttpResponse("You have logged in successfully!")
-	
-	# return HttpResponse("Invalid Login Credentials.")
 
 
 class reports(generic.ListView):
