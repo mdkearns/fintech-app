@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .forms import UserForm
 from django.contrib.auth import login
 from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from django.views import generic
@@ -39,6 +40,14 @@ def adduser(request):
         form = UserForm()
 
     return render(request, 'adduser.html', {'form': form})
+	
+def fda_authenticate(request):
+	if request.method == "POST":
+		form = UserForm(request.POST)
+		if form.is_valid():
+			return HttpResponse("You have logged in successfully!")
+	
+	return HttpResponse("Invalid Login Credentials.")
 
 
 class reports(generic.ListView):
