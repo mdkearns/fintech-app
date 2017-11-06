@@ -4,9 +4,10 @@ from django.contrib.auth import login
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
+from django.views import generic
 
 # Create your views here.
-from .models import CustomUser
+from .models import *
 
 def index(request):
     """
@@ -38,3 +39,11 @@ def adduser(request):
         form = UserForm()
 
     return render(request, 'adduser.html', {'form': form})
+
+
+class reports(generic.ListView):
+    model = Report
+    paginate_by = 2
+    context_object_name = 'user_reports'
+    queryset = Report.objects.all()
+    template_name = 'report_list.html'

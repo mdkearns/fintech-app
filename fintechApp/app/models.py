@@ -36,7 +36,8 @@ class UserMadeGroup(models.Model):
 
 
 class Report(models.Model):
-    companyUser = models.CharField(max_length=50)
+    reportName = models.CharField(max_length=50, default="NO_NAME")
+    companyUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     timeStamp = models.DateField(null=True, blank=True)
     companyName = models.CharField(max_length=50)
     companyPhone = models.CharField(max_length=12)
@@ -46,3 +47,7 @@ class Report(models.Model):
     industry = models.CharField(max_length=50)
     # currentProjects = 
     accessType = models.CharField(max_length=7, choices=(("private", "private"), ("public", "public")), default="public")
+    # files
+
+    def __str__(self):
+        return self.reportName
