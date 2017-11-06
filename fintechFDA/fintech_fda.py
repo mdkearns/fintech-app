@@ -4,6 +4,7 @@ authenticated = False
 
 while not authenticated:
 
+	print()
 	usr = input("Username: ")
 	pwd = input("Password: ")
 	login = {'username':usr, 'password':pwd}
@@ -16,7 +17,8 @@ while not authenticated:
 	print(r.text)
 	
 
-req = requests.get('http://127.0.0.1:8000/app/get_reports')
+req = requests.get('http://127.0.0.1:8000/app/get_reports', params=login)
 
-print("Available reports to view: ")
+print()
+print("Available reports to view:\n")
 print(req.text)

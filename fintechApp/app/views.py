@@ -44,14 +44,14 @@ def adduser(request):
 	
 def fda_authenticate(request):
 
-	#default_report = Report.objects.create(reportName="default_report")
-
 	if request.method == "GET":
 
 		usr = request.GET['username']
 		pwd = request.GET['password']
 		
 		user = authenticate(username=usr, password=pwd)
+		
+		#default_report = Report.objects.create(reportName="Default Report", companyUser=user)
 		
 		if user is not None:
 			return HttpResponse("You have logged in successfully!")
@@ -60,16 +60,27 @@ def fda_authenticate(request):
 			
 def get_reports(request):
 	
-	all_reports = Report.objects.all()
-	
-	report_list = ""
-	
-	for x in all_reports:
-		report_list += str(x)
-		report_list += '\n'
-		#x.delete()
+	if request.method == "GET":
 
-	return HttpResponse(report_list)
+		usr = request.GET['username']
+		pwd = request.GET['password']
+		
+		user = authenticate(username=usr, password=pwd)
+		
+		if user is not None:
+		
+			user_reports = Report.objects.filter(companyUser=user)
+			report_list = ""
+	
+			for x in user_reports:
+				report_list += '\t'
+				report_list += str(x)
+				report_list += '\n'
+				#x.delete()
+
+			return HttpResponse(report_list)
+		else:
+			return HttpResponse("Invalid User.")
 
 class reports(generic.ListView):
     model = Report
