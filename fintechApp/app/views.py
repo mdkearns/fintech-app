@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from django.views import generic
+from django.contrib.auth import authenticate
 
 # Create your views here.
 from .models import *
@@ -42,12 +43,26 @@ def adduser(request):
     return render(request, 'adduser.html', {'form': form})
 	
 def fda_authenticate(request):
-	if request.method == "POST":
-		form = UserForm(request.POST)
-		if form.is_valid():
+
+	if request.method == "GET":
+
+		usr = request.GET['username']
+		pwd = request.GET['password']
+		#valid_user = User.objects.get(username=usr)
+		
+		
+		user = authenticate(username=usr, password=pwd)
+		
+		if user is not None:
 			return HttpResponse("You have logged in successfully!")
+		else:
+			return HttpResponse("Invalid Login Credentials.")
+			
+
+		# if form.is_valid():
+			# return HttpResponse("You have logged in successfully!")
 	
-	return HttpResponse("Invalid Login Credentials.")
+	# return HttpResponse("Invalid Login Credentials.")
 
 
 class reports(generic.ListView):
