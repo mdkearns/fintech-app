@@ -2,9 +2,11 @@ from django.shortcuts import render
 from .forms import UserForm
 from django.contrib.auth import login
 from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from django.views import generic
+from django.contrib.auth import authenticate
 
 # Create your views here.
 from .models import *
@@ -39,7 +41,46 @@ def adduser(request):
         form = UserForm()
 
     return render(request, 'adduser.html', {'form': form})
+	
+def fda_authenticate(request):
 
+	if request.method == "GET":
+
+		usr = request.GET['username']
+		pwd = request.GET['password']
+		
+		user = authenticate(username=usr, password=pwd)
+		
+		#default_report = Report.objects.create(reportName="Default Report", companyUser=user)
+		
+		if user is not None:
+			return HttpResponse("You have logged in successfully!")
+		else:
+			return HttpResponse("Invalid Login Credentials.")
+			
+def get_reports(request):
+	
+	if request.method == "GET":
+
+		usr = request.GET['username']
+		pwd = request.GET['password']
+		
+		user = authenticate(username=usr, password=pwd)
+		
+		if user is not None:
+		
+			user_reports = Report.objects.filter(companyUser=user)
+			report_list = ""
+	
+			for x in user_reports:
+				report_list += '\t'
+				report_list += str(x)
+				report_list += '\n'
+				#x.delete()
+
+			return HttpResponse(report_list)
+		else:
+			return HttpResponse("Invalid User.")
 
 class reports(generic.ListView):
     model = Report
