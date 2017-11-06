@@ -17,6 +17,10 @@ class CustomUser(models.Model):
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
     user_type = models.ForeignKey(UserType)
+    is_company_user = models.BooleanField(default=False)
+    is_investor_user = models.BooleanField(default=False)
+    is_site_manager = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.first_name + self.last_name
@@ -45,7 +49,7 @@ class Report(models.Model):
     companyCountry = models.CharField(max_length=3, choices=COUNTRY_CHOICES, default="US")
     sector = models.CharField(max_length=50)
     industry = models.CharField(max_length=50)
-    # currentProjects = 
+    # currentProjects =
     accessType = models.CharField(max_length=7, choices=(("private", "private"), ("public", "public")), default="public")
     # files
 
