@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import date
 from .choiceArrays import *
+from django.forms import ModelForm
 
 
 class UserType(models.Model):
@@ -54,4 +55,13 @@ class Report(models.Model):
     # files
 
     def __str__(self):
-        return self.reportName
+        return self.reportName + self.sector
+
+    # def create_report(reportName):
+    #     self.create(reportName=reportName)
+
+class ReportForm(ModelForm):
+    class Meta:
+        model = Report
+        # fields = ['reportName', 'companyUser', 'timeStamp', 'companyName','companyPhone','companyLocation','companyCountry','sector', 'industry','accessType']
+        fields = '__all__'

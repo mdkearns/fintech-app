@@ -7,6 +7,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from django.views import generic
 from django.contrib.auth import authenticate
+from django.forms import *
 
 # Create your views here.
 from .models import *
@@ -84,7 +85,22 @@ def get_reports(request):
 
 class reports(generic.ListView):
     model = Report
-    paginate_by = 2
+    paginate_by = 10
     context_object_name = 'user_reports'
     queryset = Report.objects.all()
     template_name = 'report_list.html'
+
+
+def add_report(request):
+    if request.method == "POST":
+        modelForm = ReportForm(request.POST)
+        if modelForm.is_valid():
+            obj = modelForm.save(commit=False)
+            print(obj)
+            obj.save()
+            
+
+    else:
+        modelForm = ReportForm()
+
+    return render(request, 'add_report.html', {'modelForm': modelForm})
