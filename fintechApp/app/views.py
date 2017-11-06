@@ -44,6 +44,8 @@ def adduser(request):
 	
 def fda_authenticate(request):
 
+	#default_report = Report.objects.create(reportName="default_report")
+
 	if request.method == "GET":
 
 		usr = request.GET['username']
@@ -55,7 +57,19 @@ def fda_authenticate(request):
 			return HttpResponse("You have logged in successfully!")
 		else:
 			return HttpResponse("Invalid Login Credentials.")
+			
+def get_reports(request):
+	
+	all_reports = Report.objects.all()
+	
+	report_list = ""
+	
+	for x in all_reports:
+		report_list += str(x)
+		report_list += '\n'
+		#x.delete()
 
+	return HttpResponse(report_list)
 
 class reports(generic.ListView):
     model = Report

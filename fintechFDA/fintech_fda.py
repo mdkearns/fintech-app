@@ -16,4 +16,7 @@ while not authenticated:
 	print(r.text)
 	
 
-print(r.text)
+req = requests.get('http://127.0.0.1:8000/app/get_reports')
+
+print("Available reports to view: ")
+print(req.text)
