@@ -66,3 +66,4 @@ class ReportForm(ModelForm):
         model = Report
         # fields = ['reportName', 'companyUser', 'timeStamp', 'companyName','companyPhone','companyLocation','companyCountry','sector', 'industry','accessType']
         fields = '__all__'
+        exclude = ["companyUser"]
