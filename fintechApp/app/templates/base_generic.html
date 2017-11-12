@@ -25,7 +25,7 @@
           <li><a href="{% url 'index' %}">Home</a></li>
           {% if user.is_authenticated %}
             <li>User: {{ user.get_username }}</li>
-            <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+            <li><a href="{% url 'logout'%}">Logout</a></li>
             <li><a href="{% url 'reports'%}?next={{request.path}}">Reports</a></li>
             <li><a href="{% url 'create_report'%}?next={{request.path}}">New Report</a></li>
           {% else %}
