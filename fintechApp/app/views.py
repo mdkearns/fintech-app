@@ -91,7 +91,7 @@ class reports(generic.ListView):
     template_name = 'report_list.html'
 
 class groups(generic.ListView):
-    model = Report
+    model = UserMadeGroup
     paginate_by = 10
     context_object_name = 'groups'
     queryset = UserMadeGroup.objects.all()
@@ -115,3 +115,8 @@ def add_report(request):
 class reportDetail(generic.DetailView):
     model = Report
     template_name = 'report_detail.html'
+
+class group_detail(generic.DetailView):
+    model = UserMadeGroup
+    context_object_name = 'group'
+    template_name = 'group_detail.html'
