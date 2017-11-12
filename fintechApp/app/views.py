@@ -37,42 +37,42 @@ def adduser(request):
             g.user_set.add(new_user)
             login(request, new_user)
             # redirect, or however you want to get to the main view
-            return HttpResponseRedirect('index')
+            return HttpResponseRedirect('/app/')
     else:
         form = UserForm()
 
     return render(request, 'adduser.html', {'form': form})
-	
+
 def fda_authenticate(request):
 
 	if request.method == "GET":
 
 		usr = request.GET['username']
 		pwd = request.GET['password']
-		
+
 		user = authenticate(username=usr, password=pwd)
-		
+
 		#default_report = Report.objects.create(reportName="Default Report", companyUser=user)
-		
+
 		if user is not None:
 			return HttpResponse("You have logged in successfully!")
 		else:
 			return HttpResponse("Invalid Login Credentials.")
-			
+
 def get_reports(request):
-	
+
 	if request.method == "GET":
 
 		usr = request.GET['username']
 		pwd = request.GET['password']
-		
+
 		user = authenticate(username=usr, password=pwd)
-		
+
 		if user is not None:
-		
+
 			user_reports = Report.objects.filter(companyUser=user)
 			report_list = ""
-	
+
 			for x in user_reports:
 				report_list += '\t'
 				report_list += str(x)
@@ -98,7 +98,7 @@ def add_report(request):
             obj = modelForm.save(commit=False)
             obj.companyUser = request.user
             obj.save()
-            modelForm = ReportForm() 
+            modelForm = ReportForm()
     else:
         modelForm = ReportForm()
 
