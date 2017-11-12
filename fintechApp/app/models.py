@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from datetime import date
 from .choiceArrays import *
 from django.forms import ModelForm
+from django.urls import reverse
 
 
 class UserType(models.Model):
@@ -57,8 +58,8 @@ class Report(models.Model):
     def __str__(self):
         return self.reportName + self.sector
 
-    # def create_report(reportName):
-    #     self.create(reportName=reportName)
+    def get_absolute_url(self):
+        return reverse('report_detail', args=[str(self.id)])
 
 class ReportForm(ModelForm):
     class Meta:

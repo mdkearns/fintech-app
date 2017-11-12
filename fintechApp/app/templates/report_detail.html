@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <h1>{{ report.reportName }}</h1>
+        <p>Created by: <b>{{ report.companyUser }}</b> on {{ report.timeStamp }}</p>
+        <p>Company: {{ report.companyName }}</p>
+        <p>Location: {{ report.companyLocation }}, {{ report.companyCountry }}</p>
+        <p>Phone: {{ report.companyPhone }}</p>
+        <p>Sector: {{ report.sector }}</p>
+        <p>Industry: {{ report.industry }}</p>
+        <br><br><br><br>
+        <a href="{% url 'reports'%}?next={{request.path}}">Return to Reports</a>
+        <div style="margin-left:20px;margin-top:20px">
+        </div>
+    {% else %}
+        <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
+    {% endif %}
+
+{% endblock %}

@@ -96,11 +96,14 @@ def add_report(request):
         modelForm = ReportForm(request.POST)
         if modelForm.is_valid():
             obj = modelForm.save(commit=False)
-            print(obj)
             obj.save()
-            
-
+            modelForm = ReportForm() 
     else:
         modelForm = ReportForm()
 
     return render(request, 'add_report.html', {'modelForm': modelForm})
+
+
+class reportDetail(generic.DetailView):
+    model = Report
+    template_name = 'report_detail.html'
