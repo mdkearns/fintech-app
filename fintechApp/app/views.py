@@ -90,6 +90,13 @@ class reports(generic.ListView):
     queryset = Report.objects.all()
     template_name = 'report_list.html'
 
+class groups(generic.ListView):
+    model = Report
+    paginate_by = 10
+    context_object_name = 'groups'
+    queryset = UserMadeGroup.objects.all()
+    template_name = 'group_list.html'
+
 
 def add_report(request):
     if request.method == "POST":
