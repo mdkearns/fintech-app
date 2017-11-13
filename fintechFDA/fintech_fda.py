@@ -26,6 +26,9 @@ print()
 print("Available reports to view:\n")
 print(req.text)
 
+reports = req.text.split('\n')
+print(reports)
+
 while True:
 
 	selection = input("Enter the name of the report to view (q to quit): ")
