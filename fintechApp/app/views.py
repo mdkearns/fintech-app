@@ -127,6 +127,17 @@ class reportDetail(generic.DetailView):
     model = Report
     template_name = 'report_detail.html'
 
+def suspend_user(request):
+    if request.method == "POST":
+        modelForm = SuspendUserForm(request.POST)
+        if modelForm.is_valid():
+            obj = ModelForm.save(commit=False)
+            obj.save()
+            modelForm = ReportForm()
+    else:
+        modelForm = ReportForm()
+    return render(request, 'suspend_user.html')
+
 class group_detail(generic.DetailView):
     model = UserMadeGroup
     context_object_name = 'group'
