@@ -61,6 +61,12 @@ class Report(models.Model):
     def get_absolute_url(self):
         return reverse('report_detail', args=[str(self.id)])
 
+    class Meta:
+        permissions = (
+            ('can_view_reports', "Can view reports"),
+            ('can_change_reports', "Can change reports")
+        )
+
 class ReportForm(ModelForm):
     class Meta:
         model = Report

@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from django.views import generic
 from django.contrib.auth import authenticate
 from django.forms import *
+from django.contrib.auth.decorators import permission_required
+
 
 # Create your views here.
 from .models import *
@@ -16,7 +18,10 @@ def index(request):
     """
     View Function for home page of site
     """
-
+    # print(request.user)
+    # x = Group.objects.get(name= "Company User")
+    # print(x)
+    # print(request.user.user_permissions.all())
     # Render the HTML template index.html with the data in the context variable
     return render(
         request,
@@ -58,11 +63,10 @@ def fda_authenticate(request):
 			return HttpResponse("You have logged in successfully!")
 		else:
 			return HttpResponse("Invalid Login Credentials.")
-			
-def get_reports(request):
-	
-	if request.method == "GET":
 
+
+def get_reports(request):
+	if request.method == "GET":
 		usr = request.GET['username']
 		pwd = request.GET['password']
 		
@@ -91,6 +95,7 @@ class reports(generic.ListView):
     template_name = 'report_list.html'
 
 
+@permission_required('app.add_report')
 def add_report(request):
     if request.method == "POST":
         modelForm = ReportForm(request.POST)
@@ -103,7 +108,6 @@ def add_report(request):
         modelForm = ReportForm()
 
     return render(request, 'add_report.html', {'modelForm': modelForm})
-
 
 class reportDetail(generic.DetailView):
     model = Report
