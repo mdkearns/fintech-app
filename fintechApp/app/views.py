@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import UserForm
+from .forms import *
 from django.contrib.auth import login
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
@@ -149,14 +149,15 @@ class reportDetail(generic.DetailView):
 
 def suspend_user(request):
     if request.method == "POST":
-        modelForm = SuspendUserForm(request.POST)
-        if modelForm.is_valid():
-            obj = ModelForm.save(commit=False)
-            obj.save()
-            modelForm = ReportForm()
+        form = SuspendUserForm(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data['kam']
+            user.profile.suspended = True
+            user.save()
+            return render(request, 'suspend_user_success.html', {'form': form})
     else:
-        modelForm = ReportForm()
-    return render(request, 'suspend_user.html')
+        form = SuspendUserForm()
+    return render(request, 'suspend_user.html', {'form': form})
 
 class group_detail(generic.DetailView):
     model = UserMadeGroup

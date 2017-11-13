@@ -4,6 +4,7 @@
 {% block content %}
   <h2>Suspend User</h2>
   {% if request.user|has_group:"Site Manager"  %}
+    <p>User has been suspended</p>
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
