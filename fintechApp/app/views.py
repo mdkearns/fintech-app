@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import UserForm
+from .forms import *
 from django.contrib.auth import login
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
@@ -11,7 +11,7 @@ from django.forms import *
 
 
 # Create your views here.
-from .models import UserMadeGroup, Report
+from .models import *
 
 def index(request):
     """
@@ -69,27 +69,27 @@ def remove_user_from_group(request):
         return HttpResponseRedirect(reverse('groups'))
     else:
         return HttpResponseRedirect(reverse('index'))
-		
+
 # create default reports for testing the FDA
 def make_reports(request):
 
 	if request.method == "GET":
-	
+
 		usr = request.GET['username']
 		pwd = request.GET['password']
 
 		user = authenticate(username=usr, password=pwd)
-		
+
 		if user is not None:
 			num = 1
 			Report.objects.create(reportName="Report " + str(num), companyUser=user)
 			num += 1
 			Report.objects.create(reportName="Report " + str(num), companyUser=user)
-			
+
 			return HttpResponse("Successfully created default reports.")
 		else:
 			return HttpResponse("Unsuccessfully created default reports.")
-		
+
 def get_reports(request):
 
 	if request.method == "GET":
@@ -149,14 +149,15 @@ class reportDetail(generic.DetailView):
 
 def suspend_user(request):
     if request.method == "POST":
-        modelForm = SuspendUserForm(request.POST)
-        if modelForm.is_valid():
-            obj = ModelForm.save(commit=False)
-            obj.save()
-            modelForm = ReportForm()
+        form = SuspendUserForm(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data['kam']
+            user.profile.suspended = True
+            user.save()
+            return render(request, 'suspend_user_success.html', {'form': form})
     else:
-        modelForm = ReportForm()
-    return render(request, 'suspend_user.html')
+        form = SuspendUserForm()
+    return render(request, 'suspend_user.html', {'form': form})
 
 class group_detail(generic.DetailView):
     model = UserMadeGroup
