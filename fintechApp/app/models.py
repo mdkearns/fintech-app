@@ -12,11 +12,14 @@ class UserMadeGroup(models.Model):
     """
     Model representing a user group. Can be created by any user.
     """
-    group_name = models.CharField(max_length=50)
+    group_name = models.CharField(max_length=50, unique=True)
     members = models.ManyToManyField(User)
 
     def __str__(self):
         return self.group_name
+
+    def get_absolute_url(self):
+        return reverse('group_detail', args=[str(self.id)])
 
 
 class Report(models.Model):
