@@ -6,6 +6,7 @@ from django.forms import ModelForm
 from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django import forms
 
 class UserMadeGroup(models.Model):
     """
@@ -45,9 +46,12 @@ class ReportForm(ModelForm):
         fields = '__all__'
         exclude = ["companyUser"]
 
+class SuspendUserForm(forms.Form):
+    kam = forms.ModelChoiceField(queryset=User.objects.all())
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    suspended = models.BooleanField()
+    suspended = models.BooleanField(default=False)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
