@@ -11,7 +11,7 @@ from django.forms import *
 
 
 # Create your views here.
-from .models import UserMadeGroup, Report
+from .models import *
 
 def index(request):
     """
@@ -69,27 +69,27 @@ def remove_user_from_group(request):
         return HttpResponseRedirect(reverse('groups'))
     else:
         return HttpResponseRedirect(reverse('index'))
-		
+
 # create default reports for testing the FDA
 def make_reports(request):
 
 	if request.method == "GET":
-	
+
 		usr = request.GET['username']
 		pwd = request.GET['password']
 
 		user = authenticate(username=usr, password=pwd)
-		
+
 		if user is not None:
 			num = 1
 			Report.objects.create(reportName="Report " + str(num), companyUser=user)
 			num += 1
 			Report.objects.create(reportName="Report " + str(num), companyUser=user)
-			
+
 			return HttpResponse("Successfully created default reports.")
 		else:
 			return HttpResponse("Unsuccessfully created default reports.")
-		
+
 def get_reports(request):
 
 	if request.method == "GET":
