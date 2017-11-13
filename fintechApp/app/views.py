@@ -9,8 +9,9 @@ from django.views import generic
 from django.contrib.auth import authenticate
 from django.forms import *
 
+
 # Create your views here.
-from .models import *
+from .models import UserMadeGroup, Report
 
 def index(request):
     """
@@ -58,6 +59,16 @@ def fda_authenticate(request):
 			return HttpResponse("You have logged in successfully!")
 		else:
 			return HttpResponse("Invalid Login Credentials.")
+
+def remove_user_from_group(request):
+    username = None
+    if request.user.is_authenticated():
+        username = request.user.username
+        group_name = request.session['group_name']
+        UserMadeGroup.remove_user(group_name,username)
+        return HttpResponseRedirect(reverse('groups'))
+    else:
+        return HttpResponseRedirect(reverse('index'))
 
 def get_reports(request):
 
@@ -120,3 +131,7 @@ class group_detail(generic.DetailView):
     model = UserMadeGroup
     context_object_name = 'group'
     template_name = 'group_detail.html'
+
+    def __init__(self, *args, **kwargs):
+        super(self).__init__(*args, **kwargs)
+        self.request.session['group_name'] = self.object.group_name

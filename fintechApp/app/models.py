@@ -20,6 +20,9 @@ class UserMadeGroup(models.Model):
     def get_absolute_url(self):
         return reverse('group_detail', args=[str(self.id)])
 
+    def remove_user(group, user):
+        UserMadeGroup.objects.get(group_name=group).members.remove(User.objects.get(username=user))
+
 
 class Report(models.Model):
     reportName = models.CharField(max_length=50, default="NO_NAME")
