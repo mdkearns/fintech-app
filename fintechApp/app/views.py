@@ -60,16 +60,6 @@ def fda_authenticate(request):
 		else:
 			return HttpResponse("Invalid Login Credentials.")
 
-def remove_user_from_group(request):
-    username = None
-    if request.user.is_authenticated():
-        username = request.user.username
-        group_name = request.session['group_name']
-        UserMadeGroup.remove_user(group_name,username)
-        return HttpResponseRedirect(reverse('groups'))
-    else:
-        return HttpResponseRedirect(reverse('index'))
-
 # create default reports for testing the FDA
 def make_reports(request):
 
@@ -201,6 +191,21 @@ class group_detail(generic.DetailView):
     context_object_name = 'group'
     template_name = 'group_detail.html'
 
-    def __init__(self, *args, **kwargs):
-        super(self).__init__(*args, **kwargs)
-        self.request.session['group_name'] = self.object.group_name
+def add_group(request):
+    if request.method == "POST":
+        form = UserMadeGroupForm(request.POST)
+        if form.is_valid():
+            group_name = form.cleaned_data.get('group_name')
+            members = form.cleaned_data.get('members')
+
+            new_group = UserMadeGroup.objects.create(group_name=group_name)
+            for member in members:
+                new_group.members.add(member)
+            current_user = request.user
+            new_group.members.add(current_user)
+            # redirect, or however you want to get to the main view
+            return HttpResponseRedirect(reverse('groups'))
+    else:
+        form = UserMadeGroupForm()
+
+    return render(request, 'add_group.html', {'form': form})

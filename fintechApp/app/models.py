@@ -10,7 +10,7 @@ from django import forms
 
 class UserMadeGroup(models.Model):
     """
-    Model representing a user group. Can be created by any user.
+    Model representing a group of users. Can be created by any user.
     """
     group_name = models.CharField(max_length=50, unique=True)
     members = models.ManyToManyField(User)

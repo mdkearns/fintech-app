@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Report
+from .models import Report, UserMadeGroup
 
 GROUPS = [('Investor User','Investor User'),
     ('Company User','Company User')]
@@ -15,5 +15,7 @@ class UserForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'password1','password2','user_type')
 
-
-    
+class UserMadeGroupForm(ModelForm):
+    class Meta:
+        model = UserMadeGroup
+        fields = ['group_name', 'members']
