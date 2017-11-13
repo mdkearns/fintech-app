@@ -23,6 +23,8 @@ class Suspend(MiddlewareMixin):
             return None
         if request.path.startswith('/app/create_user/'):
             return None
+        if request.path.startswith('/admin/'):
+            return None
         if request.path.startswith('/accounts/'):
             return None
         if not request.user.is_authenticated():
