@@ -105,14 +105,45 @@ def get_reports(request):
 			report_list = ""
 
 			for x in user_reports:
-				report_list += '\t'
-				report_list += str(x)
-				report_list += '\n'
+				if str(x)[-7:] == "Private":
+					report_list += str(x)[:-7]
+					report_list += ','
+				else:
+					report_list += str(x)
+					report_list += ','
 				#x.delete()
-
+				
+			report_list = report_list[:-1]
+			
 			return HttpResponse(report_list)
 		else:
 			return HttpResponse("Invalid User.")
+
+def display_report(request):
+
+	if request.method == "GET":
+
+		usr = request.GET['username']
+		pwd = request.GET['password']
+		report_name = request.GET['report']
+
+		user = authenticate(username=usr, password=pwd)
+
+		if user is not None:
+
+			user_report = Report.objects.filter(reportName=report_name, companyUser=user)
+			report_text = ""
+			
+			for x in user_report:
+				user_report = x.display_for_fda()
+				
+			report_text += "\tReport: " + report_name + "\n"
+			report_text += "\tCreated by: " + str(usr) + "\n"
+			
+			return HttpResponse(user_report)
+		else:
+			return HttpResponse("Invalid User.")
+
 
 class reports(generic.ListView):
     model = Report
