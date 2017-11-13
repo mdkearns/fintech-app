@@ -41,6 +41,18 @@ class Report(models.Model):
 
     def __str__(self):
         return self.reportName + self.sector
+		
+    def display_for_fda(self):
+        text = "Report: " + str(self.reportName) + "\n"
+        text += "Company User: " + str(self.companyUser) + "\n"
+        text += "Time Stamp: " + str(self.timeStamp) + "\n"
+        text += "Company Name: " + str(self.companyName) + "\n"
+        text += "Company Phone: " + str(self.companyPhone) + "\n"
+        text += "Company Location: " + str(self.companyLocation) + "\n"
+        text += "Company Country: " + str(self.companyCountry) + "\n"
+        text += "Sector: " + str(self.sector) + "\n"
+        text += "Industry: " + str(self.industry) + "\n"
+        return text
 
     def get_absolute_url(self):
         return reverse('report_detail', args=[str(self.id)])
