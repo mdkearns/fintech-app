@@ -4,7 +4,7 @@
 {% block content %}
   <h2>Suspend or Unsuspend User</h2>
   {% if request.user|has_group:"Site Manager"  %}
-    <p>User has been suspended</p>
+    <p>User has been unsuspended</p>
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}

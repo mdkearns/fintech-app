@@ -112,9 +112,9 @@ def get_reports(request):
 					report_list += str(x)
 					report_list += ','
 				#x.delete()
-				
+
 			report_list = report_list[:-1]
-			
+
 			return HttpResponse(report_list)
 		else:
 			return HttpResponse("Invalid User.")
@@ -133,13 +133,13 @@ def display_report(request):
 
 			user_report = Report.objects.filter(reportName=report_name, companyUser=user)
 			report_text = ""
-			
+
 			for x in user_report:
 				user_report = x.display_for_fda()
-				
+
 			report_text += "\tReport: " + report_name + "\n"
 			report_text += "\tCreated by: " + str(usr) + "\n"
-			
+
 			return HttpResponse(user_report)
 		else:
 			return HttpResponse("Invalid User.")
@@ -182,10 +182,16 @@ def suspend_user(request):
     if request.method == "POST":
         form = SuspendUserForm(request.POST)
         if form.is_valid():
-            user = form.cleaned_data['kam']
-            user.profile.suspended = True
-            user.save()
-            return render(request, 'suspend_user_success.html', {'form': form})
+            user = form.cleaned_data['user']
+            sus = form.cleaned_data['action']
+            if sus in {'S', 'Suspend'}:
+                user.profile.suspended = True
+                user.save()
+                return render(request, 'suspend_user_success.html', {'form': form})
+            if sus == 'U':
+                user.profile.suspended = False
+                user.save()
+                return render(request, 'unsuspend_user_success.html', {'form': form})
     else:
         form = SuspendUserForm()
     return render(request, 'suspend_user.html', {'form': form})

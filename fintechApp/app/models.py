@@ -41,7 +41,7 @@ class Report(models.Model):
 
     def __str__(self):
         return self.reportName + self.sector
-		
+
     def display_for_fda(self):
         text = "Report: " + str(self.reportName) + "\n"
         text += "Company User: " + str(self.companyUser) + "\n"
@@ -65,7 +65,8 @@ class ReportForm(ModelForm):
         exclude = ["companyUser"]
 
 class SuspendUserForm(forms.Form):
-    kam = forms.ModelChoiceField(queryset=User.objects.all())
+    user = forms.ModelChoiceField(queryset=User.objects.all(), empty_label=None)
+    action = forms.ChoiceField(choices=( ('S', 'Suspend'), ('U', 'Unsuspend') ), required=True)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
