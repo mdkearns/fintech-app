@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+
+        <h1>{{ group.group_name }}</h1>
+        <p>Group Members:</p>
+        {% for member in group.members.all %}
+        <li>
+          {{member.get_username}}
+        </li>
+        {% endfor %}
+        <br><br><br><br>
+        <a href="{% url 'remove_from_group'%}?next={{request.path}}">Remove me from this group</a>
+        <br><br><br><br>
+        <a href="{% url 'groups'%}?next={{request.path}}">Return to Groups</a>
+        <div style="margin-left:20px;margin-top:20px">
+        </div>
+    {% else %}
+        <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
+    {% endif %}
+
+{% endblock %}

@@ -7,6 +7,13 @@ urlpatterns = [
     url(r'^reports/$', views.reports.as_view(), name='reports'),
 	url(r'^fda_authenticate', views.fda_authenticate, name='fda_authenticate'),
 	url(r'^get_reports', views.get_reports, name='get_reports'),
+	url(r'^make_reports', views.make_reports, name='make_reports'),
+	url(r'^display_report', views.display_report, name='display_report'),
     url(r'^create_report/', views.add_report, name='create_report'),
     url(r'^report/(?P<pk>\d+)$', views.reportDetail.as_view(), name='report_detail'),
+    url(r'^groups/$', views.groups.as_view(), name='groups'),
+    url(r'^suspend_user/', views.suspend_user, name='suspend_user'),
+    url(r'^group/(?P<pk>\d+)$', views.group_detail.as_view(), name='group_detail'),
+    url(r'^groups/remove_from_group', views.groups.as_view(), name='remove_from_group'),
+    url(r'^groups/create_group', views.add_group, name='create_group'),
 ]

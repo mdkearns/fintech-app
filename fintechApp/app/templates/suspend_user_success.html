@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+{% load user_tags %}
+
+{% block content %}
+  <h2>Suspend or Unsuspend User</h2>
+  {% if request.user|has_group:"Site Manager"  %}
+    <p>User has been suspended</p>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit"> Suspend or Unsuspend User </button>
+    </form>
+  {% else %}
+    <p>Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.</p>
+  {% endif %}
+
+{% endblock %}

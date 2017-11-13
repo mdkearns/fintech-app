@@ -4,41 +4,25 @@ from datetime import date
 from .choiceArrays import *
 from django.forms import ModelForm
 from django.urls import reverse
-
-
-class UserType(models.Model):
-    title = models.CharField(max_length=50)
-    # permissions
-
-    def __str__(self):
-        return self.title
-
-class CustomUser(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    username = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
-    user_type = models.ForeignKey(UserType)
-    is_company_user = models.BooleanField(default=False)
-    is_investor_user = models.BooleanField(default=False)
-    is_site_manager = models.BooleanField(default=False)
-
-
-    def __str__(self):
-        return self.first_name + self.last_name
-
-    def getType(self):
-        return self.user_type
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django import forms
 
 class UserMadeGroup(models.Model):
     """
-    Model representing a user group. Can be created by any user.
+    Model representing a group of users. Can be created by any user.
     """
-    group_name = models.CharField(max_length=50)
+    group_name = models.CharField(max_length=50, unique=True)
     members = models.ManyToManyField(User)
 
     def __str__(self):
         return self.group_name
+
+    def get_absolute_url(self):
+        return reverse('group_detail', args=[str(self.id)])
+
+    def remove_user(group, user):
+        UserMadeGroup.objects.get(group_name=group).members.remove(User.objects.get(username=user))
 
 
 class Report(models.Model):
@@ -58,6 +42,18 @@ class Report(models.Model):
     def __str__(self):
         return self.reportName + self.sector
 
+    def display_for_fda(self):
+        text = "Report: " + str(self.reportName) + "\n"
+        text += "Company User: " + str(self.companyUser) + "\n"
+        text += "Time Stamp: " + str(self.timeStamp) + "\n"
+        text += "Company Name: " + str(self.companyName) + "\n"
+        text += "Company Phone: " + str(self.companyPhone) + "\n"
+        text += "Company Location: " + str(self.companyLocation) + "\n"
+        text += "Company Country: " + str(self.companyCountry) + "\n"
+        text += "Sector: " + str(self.sector) + "\n"
+        text += "Industry: " + str(self.industry) + "\n"
+        return text
+
     def get_absolute_url(self):
         return reverse('report_detail', args=[str(self.id)])
 
@@ -73,3 +69,20 @@ class ReportForm(ModelForm):
         # fields = ['reportName', 'companyUser', 'timeStamp', 'companyName','companyPhone','companyLocation','companyCountry','sector', 'industry','accessType']
         fields = '__all__'
         exclude = ["companyUser"]
+
+class SuspendUserForm(forms.Form):
+    user = forms.ModelChoiceField(queryset=User.objects.all(), empty_label=None)
+    action = forms.ChoiceField(choices=( ('S', 'Suspend'), ('U', 'Unsuspend') ), required=True)
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    suspended = models.BooleanField(default=False)
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
