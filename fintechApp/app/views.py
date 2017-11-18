@@ -190,6 +190,18 @@ def suspend_user(request):
         form = SuspendUserForm()
     return render(request, 'suspend_user.html', {'form': form})
 
+def add_sm(request):
+    if request.method == "POST":
+        form = AddSMForm(request.POST)
+        if form.is_valid():
+           user = form.cleaned_data['user']
+           group = Group.objects.get(name='Site Manager')
+           user.groups.add(group)
+           return render(request, 'add_sm_success.html', {'form': form})
+    else:
+        form = AddSMForm()
+    return render(request, 'add_sm.html', {'form': form})
+
 class group_detail(generic.DetailView):
     model = UserMadeGroup
     context_object_name = 'group'

@@ -74,6 +74,9 @@ class SuspendUserForm(forms.Form):
     user = forms.ModelChoiceField(queryset=User.objects.all(), empty_label=None)
     action = forms.ChoiceField(choices=( ('S', 'Suspend'), ('U', 'Unsuspend') ), required=True)
 
+class AddSMForm(forms.Form):
+    user = forms.ModelChoiceField(queryset=User.objects.all(), empty_label=None)
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     suspended = models.BooleanField(default=False)

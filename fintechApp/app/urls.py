@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^group/(?P<pk>\d+)$', views.group_detail.as_view(), name='group_detail'),
     url(r'^groups/remove_from_group', views.groups.as_view(), name='remove_from_group'),
     url(r'^groups/create_group', views.add_group, name='create_group'),
+    url(r'^add_sm/', views.add_sm, name='add_sm'),
 ]
