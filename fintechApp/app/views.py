@@ -202,6 +202,24 @@ def add_sm(request):
         form = AddSMForm()
     return render(request, 'add_sm.html', {'form': form})
 
+def sm_add_to_group(request):
+    if request.method == "POST":
+        form = AddToGroupForm(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data['user']
+            group = form.cleaned_data['group']
+            action = form.cleaned_data['action']
+            if action == 'A':
+                UserMadeGroup.add_user(group, user)
+                return render(request, 'sm_add_to_group_success.html', {'form':form})
+            if action == 'R':
+                UserMadeGroup.remove_user(group, user)
+                return render(request, 'sm_remove_from_group_success.html', {'form':form})
+            return render(request, 'sm_add_to_group.html', {'form':form})
+    else:
+        form = AddToGroupForm()
+    return render(request, 'sm_add_to_group.html', {'form': form})
+
 class group_detail(generic.DetailView):
     model = UserMadeGroup
     context_object_name = 'group'

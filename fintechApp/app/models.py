@@ -24,6 +24,8 @@ class UserMadeGroup(models.Model):
     def remove_user(group, user):
         UserMadeGroup.objects.get(group_name=group).members.remove(User.objects.get(username=user))
 
+    def add_user(group, user):
+        UserMadeGroup.objects.get(group_name=group).members.add(User.objects.get(username=user))
 
 class Report(models.Model):
     reportName = models.CharField(max_length=50, default="NO_NAME")
@@ -76,6 +78,11 @@ class SuspendUserForm(forms.Form):
 
 class AddSMForm(forms.Form):
     user = forms.ModelChoiceField(queryset=User.objects.all(), empty_label=None)
+
+class AddToGroupForm(forms.Form):
+    user = forms.ModelChoiceField(queryset=User.objects.all(), empty_label=None)
+    group = forms.ModelChoiceField(queryset = UserMadeGroup.objects.all(), empty_label=None)
+    action = forms.ChoiceField(choices=( ('A', 'Add'), ('R', 'Remove') ), required=True)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

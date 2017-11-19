@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+{% load user_tags %}
+
+{% block content %}
+  <h2>Add or Remove User from Group</h2>
+  {% if request.user|has_group:"Site Manager"  %}
+  <p>User has been added to group<p>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Add or Remove User from Group</button>
+    </form>
+  {% else %}
+    <p>Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.</p>
+  {% endif %}
+
+{% endblock %}

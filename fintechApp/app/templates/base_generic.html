@@ -33,6 +33,7 @@
               {% if request.user|has_group:"Site Manager"  %}
                 <li><a href="{% url 'suspend_user'%}?next={{request.path}}">Suspend User</a></li>
                 <li><a href="{% url 'add_sm'%}?next={{request.path}}">Add Site Manager</a></li>
+                <li><a href="{% url 'sm_add_to_group'%}?next={{request.path}}">SM Groups</a></li>
               {% endif %}
           {% else %}
              <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
