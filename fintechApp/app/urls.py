@@ -10,6 +10,7 @@ urlpatterns = [
 	url(r'^make_reports', views.make_reports, name='make_reports'),
 	url(r'^display_report', views.display_report, name='display_report'),
     url(r'^create_report/', views.add_report, name='create_report'),
+    url(r'^add_reportFile/', views.add_reportFile, name='add_reportFile'),
     url(r'^report/(?P<pk>\d+)$', views.reportDetail.as_view(), name='report_detail'),
     url(r'^groups/$', views.groups.as_view(), name='groups'),
     url(r'^suspend_user/', views.suspend_user, name='suspend_user'),

@@ -1,14 +1,12 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h2>New Report</h2>
+  <h2>New ReportFile</h2>
   {% if user.is_authenticated %}  
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       {{ modelForm.as_p }}
-      <a href="{% url 'add_reportFile'%}">Add ReportFile</a>
-      <br><br>
-      <button type="submit">Submit Report</button>
+      <button type="submit">Submit ReportFile</button>
     </form>
   {% else %}
     <p>Your account doesn't have access to this page. To proceed,

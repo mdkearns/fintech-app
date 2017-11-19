@@ -170,6 +170,22 @@ def add_report(request):
 
     return render(request, 'add_report.html', {'modelForm': modelForm})
 
+
+@permission_required('app.add_report')
+def add_reportFile(request):
+    print(request.FILES)
+    if request.method == "POST":
+        modelForm = ReportFileForm(request.POST, request.FILES)
+        if modelForm.is_valid():
+            obj = modelForm.save(commit=False)
+            obj.companyUser = request.user
+            obj.save()
+            modelForm = ReportForm()
+    else:
+        modelForm = ReportFileForm()
+
+    return render(request, 'add_ReportFile.html', {'modelForm': modelForm})
+
 class reportDetail(generic.DetailView):
     model = Report
     template_name = 'report_detail.html'

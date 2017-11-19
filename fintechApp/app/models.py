@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django import forms
+from django.core.files.storage import FileSystemStorage
 
 class UserMadeGroup(models.Model):
     """
@@ -25,6 +26,16 @@ class UserMadeGroup(models.Model):
         UserMadeGroup.objects.get(group_name=group).members.remove(User.objects.get(username=user))
 
 
+class ReportFile(models.Model):
+    companyUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(max_length=50, default="NO_NAME")
+    file = models.FileField(upload_to='files/')
+    encrypted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
+
 class Report(models.Model):
     reportName = models.CharField(max_length=50, default="NO_NAME")
     companyUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
@@ -37,7 +48,7 @@ class Report(models.Model):
     industry = models.CharField(max_length=50)
     # currentProjects =
     accessType = models.CharField(max_length=7, choices=(("private", "private"), ("public", "public")), default="public")
-    # files
+    files = models.ManyToManyField(ReportFile, null=True)
 
     def __str__(self):
         return self.reportName + self.sector
@@ -69,6 +80,14 @@ class ReportForm(ModelForm):
         # fields = ['reportName', 'companyUser', 'timeStamp', 'companyName','companyPhone','companyLocation','companyCountry','sector', 'industry','accessType']
         fields = '__all__'
         exclude = ["companyUser"]
+
+
+class ReportFileForm(ModelForm):
+    class Meta:
+        model = ReportFile
+        fields = '__all__'
+        exclude = ["companyUser"]
+
 
 class SuspendUserForm(forms.Form):
     user = forms.ModelChoiceField(queryset=User.objects.all(), empty_label=None)
