@@ -19,3 +19,13 @@ class UserMadeGroupForm(ModelForm):
     class Meta:
         model = UserMadeGroup
         fields = ['group_name', 'members']
+
+class RemoveUserMadeGroupForm(forms.Form):
+    request = None
+    usermadegroups = forms.ModelMultipleChoiceField(queryset=None)
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request")
+        super(RemoveUserMadeGroupForm, self).__init__(*args, **kwargs)
+        self.fields['usermadegroups'].queryset=UserMadeGroup.objects.filter(members=self.request.user)
+        self.fields['usermadegroups'].label = 'Groups you belong to'

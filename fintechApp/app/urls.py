@@ -14,7 +14,8 @@ urlpatterns = [
     url(r'^groups/$', views.groups.as_view(), name='groups'),
     url(r'^suspend_user/', views.suspend_user, name='suspend_user'),
     url(r'^group/(?P<pk>\d+)$', views.group_detail.as_view(), name='group_detail'),
-    url(r'^groups/remove_from_group', views.groups.as_view(), name='remove_from_group'),
+    url(r'^groups/remove_from_groups', views.remove_from_groups, name='remove_from_groups'),
+    url(r'^groups/add_users_to_group', views.groups.as_view(), name='add_users_to_group'),
     url(r'^groups/create_group', views.add_group, name='create_group'),
     url(r'^add_sm/', views.add_sm, name='add_sm'),
 ]

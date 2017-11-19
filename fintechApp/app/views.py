@@ -150,8 +150,10 @@ class groups(generic.ListView):
     model = UserMadeGroup
     paginate_by = 10
     context_object_name = 'groups'
-    queryset = UserMadeGroup.objects.all()
     template_name = 'group_list.html'
+
+    def get_queryset(self):
+        return UserMadeGroup.objects.filter(members=self.request.user)
 
 
 @permission_required('app.add_report')
@@ -225,3 +227,18 @@ def add_group(request):
         form = UserMadeGroupForm()
 
     return render(request, 'add_group.html', {'form': form})
+
+def remove_from_groups(request):
+    if request.method == "POST":
+        form = RemoveUserMadeGroupForm(request.POST, request=request)
+        if form.is_valid():
+            groups = form.cleaned_data.get('usermadegroups')
+            current_user = request.user
+            for group in groups:
+                group.members.remove(current_user)
+            # redirect, or however you want to get to the main view
+            return HttpResponseRedirect(reverse('groups'))
+    else:
+        form = RemoveUserMadeGroupForm(request=request)
+
+    return render(request, 'remove_user_from_groups.html', {'form': form})
