@@ -9,6 +9,7 @@ from django.views import generic
 from django.contrib.auth import authenticate
 from django.forms import *
 from django.contrib.auth.decorators import permission_required
+from time import gmtime, strftime
 
 
 
@@ -19,11 +20,6 @@ def index(request):
     """
     View Function for home page of site
     """
-    x = Report.objects.filter(reportName = "withFiles")
-    # print(x.first().files)
-    y = Report.objects.last().files.all()
-    print(y)
-
     # print(request.user)
     # x = Group.objects.get(name= "Company User")
     # print(x)
@@ -168,11 +164,10 @@ def add_report(request):
         if modelForm.is_valid():
             obj = modelForm.save(commit=False)
             obj.companyUser = request.user
-
+            obj.timeStamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
             
             obj.save()
             modelForm.save_m2m()
-            print(modelForm.files)
             modelForm = ReportForm()
     else:
         modelForm = ReportForm()

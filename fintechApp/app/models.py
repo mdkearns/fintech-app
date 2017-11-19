@@ -39,7 +39,7 @@ class ReportFile(models.Model):
 class Report(models.Model):
     reportName = models.CharField(max_length=50, default="NO_NAME")
     companyUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    timeStamp = models.DateField(null=True, blank=True)
+    timeStamp = models.DateTimeField(null=True, blank=True)
     companyName = models.CharField(max_length=50)
     companyPhone = models.CharField(max_length=12)
     companyLocation = models.CharField(max_length=50)
@@ -79,7 +79,7 @@ class ReportForm(ModelForm):
         model = Report
         # fields = ['reportName', 'companyUser', 'timeStamp', 'companyName','companyPhone','companyLocation','companyCountry','sector', 'industry','accessType']
         fields = '__all__'
-        exclude = ["companyUser"]
+        exclude = ["companyUser", "timeStamp"]
 
 
 class ReportFileForm(ModelForm):
@@ -87,9 +87,6 @@ class ReportFileForm(ModelForm):
         model = ReportFile
         fields = '__all__'
         exclude = ["companyUser"]
-        widgets = {
-            'files': Select(),
-        }
 
 
 class SuspendUserForm(forms.Form):
