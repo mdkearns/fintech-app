@@ -19,6 +19,11 @@ def index(request):
     """
     View Function for home page of site
     """
+    x = Report.objects.filter(reportName = "withFiles")
+    # print(x.first().files)
+    y = Report.objects.last().files.all()
+    print(y)
+
     # print(request.user)
     # x = Group.objects.get(name= "Company User")
     # print(x)
@@ -141,7 +146,7 @@ def display_report(request):
 
 class reports(generic.ListView):
     model = Report
-    paginate_by = 10
+    paginate_by = 20
     context_object_name = 'user_reports'
     queryset = Report.objects.all()
     template_name = 'report_list.html'
@@ -163,7 +168,11 @@ def add_report(request):
         if modelForm.is_valid():
             obj = modelForm.save(commit=False)
             obj.companyUser = request.user
+
+            
             obj.save()
+            modelForm.save_m2m()
+            print(modelForm.files)
             modelForm = ReportForm()
     else:
         modelForm = ReportForm()
@@ -188,6 +197,7 @@ def add_reportFile(request):
 
 class reportDetail(generic.DetailView):
     model = Report
+    context_object_name = 'report'
     template_name = 'report_detail.html'
 
 def suspend_user(request):
