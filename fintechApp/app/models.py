@@ -80,7 +80,13 @@ class ReportForm(ModelForm):
         # fields = ['reportName', 'companyUser', 'timeStamp', 'companyName','companyPhone','companyLocation','companyCountry','sector', 'industry','accessType']
         fields = '__all__'
         exclude = ["companyUser", "timeStamp"]
+        request = None
+        files = forms.ModelMultipleChoiceField(queryset=None)
 
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', User.objects.get(pk_of_default_user))
+        super(ReportForm, self).__init__(*args, **kwargs)
+        self.fields['files'].queryset = ReportFile.objects.filter(companyUser = user)
 
 class ReportFileForm(ModelForm):
     class Meta:

@@ -20,6 +20,7 @@ def index(request):
     """
     View Function for home page of site
     """
+    print(ReportFile.objects.filter(companyUser = request.user))
     # print(request.user)
     # x = Group.objects.get(name= "Company User")
     # print(x)
@@ -160,7 +161,7 @@ class groups(generic.ListView):
 @permission_required('app.add_report')
 def add_report(request):
     if request.method == "POST":
-        modelForm = ReportForm(request.POST)
+        modelForm = ReportForm(request.POST, user=request.user)
         if modelForm.is_valid():
             obj = modelForm.save(commit=False)
             obj.companyUser = request.user

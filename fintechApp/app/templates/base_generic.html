@@ -27,8 +27,8 @@
           {% if user.is_authenticated %}
             <li>User: {{ user.get_username }}</li>
             <li><a href="{% url 'logout'%}">Logout</a></li>
-            <li><a href="{% url 'reports'%}?next={{request.path}}">Reports</a></li>
             <li><a href="{% url 'groups'%}?next={{request.path}}">Groups</a></li>
+            <li><a href="{% url 'reports'%}?next={{request.path}}">Reports</a></li>
             <li><a href="{% url 'create_report'%}?next={{request.path}}">New Report</a></li>
               {% if request.user|has_group:"Site Manager"  %}
                 <li><a href="{% url 'suspend_user'%}?next={{request.path}}">Suspend User</a></li>
