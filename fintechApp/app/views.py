@@ -150,8 +150,9 @@ class groups(generic.ListView):
     model = UserMadeGroup
     paginate_by = 10
     context_object_name = 'groups'
-    queryset = UserMadeGroup.objects.all()
     template_name = 'group_list.html'
+    def get_queryset(self):
+        return UserMadeGroup.objects.filter(members = self.request.user)
 
 
 @permission_required('app.add_report')
