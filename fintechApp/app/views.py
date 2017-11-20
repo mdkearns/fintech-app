@@ -9,7 +9,11 @@ from django.views import generic
 from django.contrib.auth import authenticate
 from django.forms import *
 from django.contrib.auth.decorators import permission_required
-
+from django.views.generic.edit import UpdateView
+from time import gmtime, strftime
+import json
+import operator
+from django.db.models import Q
 
 
 # Create your views here.
@@ -19,6 +23,7 @@ def index(request):
     """
     View Function for home page of site
     """
+    print(ReportFile.objects.filter(companyUser = request.user))
     # print(request.user)
     # x = Group.objects.get(name= "Company User")
     # print(x)
@@ -146,6 +151,34 @@ class reports(generic.ListView):
     queryset = Report.objects.all()
     template_name = 'report_list.html'
 
+class reportSearchListView(generic.ListView):
+    model = Report
+    paginate_by = 10
+    template_name = 'report_list.html'
+    context_object_name = 'user_reports'
+
+    def get_queryset(self):
+        result = Report.objects.all()
+        reportName = self.request.GET.get('reportName')
+        reportNameExact = self.request.GET.get('reportNameExact')
+        companyName = self.request.GET.get('companyName')
+        companyNameExact = self.request.GET.get('companyNameExact')
+        myReports = self.request.GET.get('myReports')
+
+        if reportNameExact and reportName:
+            result = result.filter(reportName = reportName)
+        elif reportName:
+            result = result.filter(reportName__contains = reportName)
+        if companyNameExact and companyName:
+            result = result.filter(companyName = companyName)
+        elif companyName:
+            result = result.filter(companyName__contains = companyName)
+        if myReports:
+            result = result.filter(companyUser = self.request.user)
+
+
+        return result
+
 class groups(generic.ListView):
     model = UserMadeGroup
     paginate_by = 10
@@ -154,24 +187,62 @@ class groups(generic.ListView):
     def get_queryset(self):
         return UserMadeGroup.objects.filter(members = self.request.user)
 
+    def get_queryset(self):
+        return UserMadeGroup.objects.filter(members=self.request.user)
+
+class messages(generic.ListView):
+    model = Message
+    paginate_by = 10
+    context_object_name = 'messages'
+    template_name = 'view_messages.html'
+
+    def get_queryset(self):
+        return Message.objects.filter(receiver=self.request.user)
+
+class message_detail(generic.detail.DetailView):
+    model = Message
+    context_object_name = 'message'
+    template_name = 'message_detail.html'
+
 
 @permission_required('app.add_report')
 def add_report(request):
     if request.method == "POST":
-        modelForm = ReportForm(request.POST)
+        modelForm = ReportForm(request.POST, user=request.user)
+        if modelForm.is_valid():
+            obj = modelForm.save(commit=False)
+            obj.companyUser = request.user
+            obj.timeStamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+
+            obj.save()
+            modelForm.save_m2m()
+            modelForm = ReportForm(user=request.user)
+    else:
+        modelForm = ReportForm( user=request.user)
+
+    return render(request, 'add_report.html', {'modelForm': modelForm})
+
+
+@permission_required('app.add_report')
+def add_reportFile(request):
+    print(request.FILES)
+    if request.method == "POST":
+        modelForm = ReportFileForm(request.POST, request.FILES)
         if modelForm.is_valid():
             obj = modelForm.save(commit=False)
             obj.companyUser = request.user
             obj.save()
-            modelForm = ReportForm()
+            modelForm = ReportFileForm()
     else:
-        modelForm = ReportForm()
+        modelForm = ReportFileForm()
 
-    return render(request, 'add_report.html', {'modelForm': modelForm})
+    return render(request, 'add_ReportFile.html', {'modelForm': modelForm})
 
 class reportDetail(generic.DetailView):
     model = Report
+    context_object_name = 'report'
     template_name = 'report_detail.html'
+
 
 def suspend_user(request):
     if request.method == "POST":
@@ -203,6 +274,7 @@ def add_sm(request):
         form = AddSMForm()
     return render(request, 'add_sm.html', {'form': form})
 
+<<<<<<< HEAD
 def sm_add_to_group(request):
     if request.method == "POST":
         form = AddToGroupForm(request.POST)
@@ -222,6 +294,9 @@ def sm_add_to_group(request):
     return render(request, 'sm_add_to_group.html', {'form': form})
 
 class group_detail(generic.DetailView):
+=======
+class group_detail(generic.detail.DetailView):
+>>>>>>> bf7ef3dd3199cb48dda48e084ae7ad75dd13fc26
     model = UserMadeGroup
     context_object_name = 'group'
     template_name = 'group_detail.html'
@@ -244,3 +319,48 @@ def add_group(request):
         form = UserMadeGroupForm()
 
     return render(request, 'add_group.html', {'form': form})
+
+def remove_from_groups(request):
+    if request.method == "POST":
+        form = RemoveUserMadeGroupForm(request.POST, request=request)
+        if form.is_valid():
+            groups = form.cleaned_data.get('usermadegroups')
+            current_user = request.user
+            for group in groups:
+                group.members.remove(current_user)
+            # redirect, or however you want to get to the main view
+            return HttpResponseRedirect(reverse('groups'))
+    else:
+        form = RemoveUserMadeGroupForm(request=request)
+
+    return render(request, 'remove_user_from_groups.html', {'form': form})
+
+def add_users_to_group(request, pk):
+    if request.method == "POST":
+        form = AddUserToUserMadeGroupForm(request.POST, request=request)
+
+        if form.is_valid():
+            group = UserMadeGroup.objects.filter(group_name = request.session['group_name']).first()
+            users = form.cleaned_data.get('users')
+            current_user = request.user
+            for user in users:
+                group.members.add(user)
+            # redirect, or however you want to get to the main view
+            return HttpResponseRedirect(reverse('groups'))
+    else:
+        form = AddUserToUserMadeGroupForm(request=request)
+    return render(request, 'add_users_to_group.html', {'form': form})
+
+def choose_group_to_add_users(request):
+    if request.method == "POST":
+        form = ChooseGroupToAddUsersForm(request.POST, request=request)
+        if form.is_valid():
+            group = form.cleaned_data.get('usermadegroup')
+            group_name = form.cleaned_data.get('usermadegroup').group_name
+            request.session['group_name'] = group_name
+            # redirect, or however you want to get to the main view
+            return HttpResponseRedirect(group.get_absolute_url() + '/add_users_to_group')
+    else:
+        form = ChooseGroupToAddUsersForm(request=request)
+
+    return render(request, 'choose_group_to_add_users.html', {'form': form})

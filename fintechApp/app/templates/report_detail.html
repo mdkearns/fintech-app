@@ -9,6 +9,7 @@
         <p>Phone: {{ report.companyPhone }}</p>
         <p>Sector: {{ report.sector }}</p>
         <p>Industry: {{ report.industry }}</p>
+        <p>Files: {% for file in report.files.all %}{{file}}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
         <br><br><br><br>
         <a href="{% url 'reports'%}?next={{request.path}}">Return to Reports</a>
         <div style="margin-left:20px;margin-top:20px">

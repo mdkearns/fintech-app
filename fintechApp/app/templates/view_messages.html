@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Your Messages</h1>
+    {% if user.is_authenticated %}
+        {% if messages %}
+        <ul>
+
+        {% for message in messages %}
+        <li>
+            <a href="{{ message.get_absolute_url }}">
+                {{ message.message_subject}}</a>
+        </li>
+        {% endfor %}
+
+        </ul>
+
+        {% else %}
+        <p>You have no messages.</p>
+        {% endif %}
+
+    {% else %}
+      <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
+    {% endif %}
+{% endblock %}

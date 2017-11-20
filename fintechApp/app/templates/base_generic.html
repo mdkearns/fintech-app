@@ -27,9 +27,10 @@
           {% if user.is_authenticated %}
             <li>User: {{ user.get_username }}</li>
             <li><a href="{% url 'logout'%}">Logout</a></li>
-            <li><a href="{% url 'reports'%}?next={{request.path}}">Reports</a></li>
             <li><a href="{% url 'groups'%}?next={{request.path}}">Groups</a></li>
+            <li><a href="{% url 'reports'%}?next={{request.path}}">Reports</a></li>
             <li><a href="{% url 'create_report'%}?next={{request.path}}">New Report</a></li>
+            <li><a href="{% url 'messages'%}?next={{request.path}}">Messages</a></li>
               {% if request.user|has_group:"Site Manager"  %}
                 <li><a href="{% url 'suspend_user'%}?next={{request.path}}">Suspend User</a></li>
                 <li><a href="{% url 'add_sm'%}?next={{request.path}}">Add Site Manager</a></li>
@@ -44,6 +45,25 @@
       </div>
       <div class="col-sm-10 ">
       {% block content %}{% endblock %}
+
+      {% block pagination %}
+      {% if is_paginated %}
+        <div class="pagination">
+          <span class="page-links">
+            {% if page_obj.has_previous %}
+              <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+            <span class="page-current">
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+            <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+            {% endif %}
+            </span>
+          </div>
+      {% endif %}
+      {% endblock %}
+
       </div>
     </div>
 

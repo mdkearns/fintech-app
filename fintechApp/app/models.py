@@ -2,11 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import date
 from .choiceArrays import *
-from django.forms import ModelForm
+from django.forms import ModelForm, Select
 from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django import forms
+from django.core.files.storage import FileSystemStorage
+import json
 
 class UserMadeGroup(models.Model):
     """
@@ -21,8 +23,14 @@ class UserMadeGroup(models.Model):
     def get_absolute_url(self):
         return reverse('group_detail', args=[str(self.id)])
 
-    def remove_user(group, user):
-        UserMadeGroup.objects.get(group_name=group).members.remove(User.objects.get(username=user))
+class ReportFile(models.Model):
+    companyUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(max_length=50, default="NO_NAME")
+    file = models.FileField(upload_to='files/')
+    encrypted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
 
     def add_user(group, user):
         UserMadeGroup.objects.get(group_name=group).members.add(User.objects.get(username=user))
@@ -30,7 +38,7 @@ class UserMadeGroup(models.Model):
 class Report(models.Model):
     reportName = models.CharField(max_length=50, default="NO_NAME")
     companyUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    timeStamp = models.DateField(null=True, blank=True)
+    timeStamp = models.DateTimeField(null=True, blank=True)
     companyName = models.CharField(max_length=50)
     companyPhone = models.CharField(max_length=12)
     companyLocation = models.CharField(max_length=50)
@@ -39,7 +47,7 @@ class Report(models.Model):
     industry = models.CharField(max_length=50)
     # currentProjects =
     accessType = models.CharField(max_length=7, choices=(("private", "private"), ("public", "public")), default="public")
-    # files
+    files = models.ManyToManyField(ReportFile, null=True, blank=True)
 
     def __str__(self):
         return self.reportName + self.sector
@@ -65,12 +73,35 @@ class Report(models.Model):
             ('can_change_reports', "Can change reports")
         )
 
+class Message(models.Model):
+    message_subject = models.CharField(max_length = 200, blank = False)
+    message_text = models.TextField(blank = False)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'sender')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'receiver')
+
+    def get_absolute_url(self):
+        return reverse('message_detail', args=[str(self.id)])
+
 class ReportForm(ModelForm):
     class Meta:
         model = Report
         # fields = ['reportName', 'companyUser', 'timeStamp', 'companyName','companyPhone','companyLocation','companyCountry','sector', 'industry','accessType']
         fields = '__all__'
+        exclude = ["companyUser", "timeStamp"]
+        request = None
+        files = forms.ModelMultipleChoiceField(queryset=None)
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super(ReportForm, self).__init__(*args, **kwargs)
+        self.fields['files'].queryset = ReportFile.objects.filter(companyUser = user)
+
+class ReportFileForm(ModelForm):
+    class Meta:
+        model = ReportFile
+        fields = '__all__'
         exclude = ["companyUser"]
+
 
 class SuspendUserForm(forms.Form):
     user = forms.ModelChoiceField(queryset=User.objects.all(), empty_label=None)

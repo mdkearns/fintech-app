@@ -3,15 +3,12 @@
 {% block content %}
     {% if user.is_authenticated %}
 
-        <h1>{{ group.group_name }}</h1>
-        <p>Group Members:</p>
-        {% for member in group.members.all %}
-        <li>
-          {{member.get_username}}
-        </li>
-        {% endfor %}
-        <br><br><br><br>
-        <a href="{% url 'groups'%}?next={{request.path}}">Return to Groups</a>
+        <h3>Subject: {{ message.message_subject }}</h3>
+        <p>From: {{message.sender.username}}</p>
+        <br><br>
+        <p>{{message.message_text}}</p>
+        <br><br>
+        <a href="{% url 'messages'%}?next={{request.path}}">Return to Messages</a>
         <div style="margin-left:20px;margin-top:20px">
         </div>
     {% else %}
