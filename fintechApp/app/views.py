@@ -274,7 +274,6 @@ def add_sm(request):
         form = AddSMForm()
     return render(request, 'add_sm.html', {'form': form})
 
-<<<<<<< HEAD
 def sm_add_to_group(request):
     if request.method == "POST":
         form = AddToGroupForm(request.POST)
@@ -293,10 +292,7 @@ def sm_add_to_group(request):
         form = AddToGroupForm()
     return render(request, 'sm_add_to_group.html', {'form': form})
 
-class group_detail(generic.DetailView):
-=======
 class group_detail(generic.detail.DetailView):
->>>>>>> bf7ef3dd3199cb48dda48e084ae7ad75dd13fc26
     model = UserMadeGroup
     context_object_name = 'group'
     template_name = 'group_detail.html'

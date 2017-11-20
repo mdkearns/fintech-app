@@ -23,6 +23,12 @@ class UserMadeGroup(models.Model):
     def get_absolute_url(self):
         return reverse('group_detail', args=[str(self.id)])
 
+    def add_user(group, user):
+        UserMadeGroup.objects.get(group_name=group).members.add(User.objects.get(username=user))
+
+    def remove_user(group, user):
+        UserMadeGroup.objects.get(group_name=group).members.remove(User.objects.get(username=user))
+
 class ReportFile(models.Model):
     companyUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=50, default="NO_NAME")
@@ -32,8 +38,6 @@ class ReportFile(models.Model):
     def __str__(self):
         return self.name
 
-    def add_user(group, user):
-        UserMadeGroup.objects.get(group_name=group).members.add(User.objects.get(username=user))
 
 class Report(models.Model):
     reportName = models.CharField(max_length=50, default="NO_NAME")
