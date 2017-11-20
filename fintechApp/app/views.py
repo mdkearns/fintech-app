@@ -9,6 +9,7 @@ from django.views import generic
 from django.contrib.auth import authenticate
 from django.forms import *
 from django.contrib.auth.decorators import permission_required
+from django.views.generic.edit import UpdateView
 
 
 
@@ -204,10 +205,16 @@ def add_sm(request):
         form = AddSMForm()
     return render(request, 'add_sm.html', {'form': form})
 
-class group_detail(generic.DetailView):
+class group_detail(generic.detail.DetailView):
     model = UserMadeGroup
     context_object_name = 'group'
     template_name = 'group_detail.html'
+    object = None
+
+    def __init__(self, *args, **kwargs):
+        super(group_detail, self).__init__(*args, **kwargs)
+        self.object = self.get_object()
+        self.request.session['this_group'] = self.object
 
 def add_group(request):
     if request.method == "POST":
@@ -242,3 +249,18 @@ def remove_from_groups(request):
         form = RemoveUserMadeGroupForm(request=request)
 
     return render(request, 'remove_user_from_groups.html', {'form': form})
+
+def add_users_to_group(request, pk):
+    if request.method == "POST":
+        form = AddUserToUserMadeGroupForm(request.POST, request=request)
+
+        if form.is_valid():
+            users = form.cleaned_data.get('users')
+            current_user = request.user
+            for user in users:
+                group.members.add(user)
+            # redirect, or however you want to get to the main view
+            return HttpResponseRedirect(reverse('groups'))
+    else:
+        form = AddUserToUserMadeGroupForm(request=request)
+    return render(request, 'add_users_to_group.html', {'form': form})
