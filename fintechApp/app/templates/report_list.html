@@ -3,6 +3,18 @@
 {% block content %}
 <h1>View Reports</h1>
     {% if user.is_authenticated %}
+    <form action="{% url 'reports_search' %}"  method="get" accept-charset="utf-8">
+        <input name="reportName" type="text" placeholder="Report Name">
+        <input name="reportNameExact" type="checkbox"> is exact
+        <br>
+        <input name="companyName" type="text" placeholder="Company Name">
+        <input name="companyNameExact" type="checkbox"> is exact
+        <br>
+        <input name="myReports" type="checkbox"> only my reports
+        <br><br>
+        <button type="submit">Search</button>
+    </form>
+    <br><br><br>
         {% if user_reports %}
         <ul>
 
