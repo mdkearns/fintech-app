@@ -11,6 +11,7 @@ from django.forms import *
 from django.contrib.auth.decorators import permission_required
 from django.views.generic.edit import UpdateView
 from time import gmtime, strftime
+import json
 
 
 # Create your views here.
@@ -166,7 +167,7 @@ def add_report(request):
             obj = modelForm.save(commit=False)
             obj.companyUser = request.user
             obj.timeStamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-            
+
             obj.save()
             modelForm.save_m2m()
             modelForm = ReportForm(user=request.user)
@@ -231,12 +232,6 @@ class group_detail(generic.detail.DetailView):
     model = UserMadeGroup
     context_object_name = 'group'
     template_name = 'group_detail.html'
-    object = None
-
-    def __init__(self, *args, **kwargs):
-        super(group_detail, self).__init__(*args, **kwargs)
-        self.object = self.get_object()
-        self.request.session['this_group'] = self.object
 
 def add_group(request):
     if request.method == "POST":
@@ -277,6 +272,7 @@ def add_users_to_group(request, pk):
         form = AddUserToUserMadeGroupForm(request.POST, request=request)
 
         if form.is_valid():
+            group = UserMadeGroup.objects.filter(group_name = request.session['group_name']).first()
             users = form.cleaned_data.get('users')
             current_user = request.user
             for user in users:
@@ -286,3 +282,17 @@ def add_users_to_group(request, pk):
     else:
         form = AddUserToUserMadeGroupForm(request=request)
     return render(request, 'add_users_to_group.html', {'form': form})
+
+def choose_group_to_add_users(request):
+    if request.method == "POST":
+        form = ChooseGroupToAddUsersForm(request.POST, request=request)
+        if form.is_valid():
+            group = form.cleaned_data.get('usermadegroup')
+            group_name = form.cleaned_data.get('usermadegroup').group_name
+            request.session['group_name'] = group_name
+            # redirect, or however you want to get to the main view
+            return HttpResponseRedirect(group.get_absolute_url() + '/add_users_to_group')
+    else:
+        form = ChooseGroupToAddUsersForm(request=request)
+
+    return render(request, 'choose_group_to_add_users.html', {'form': form})

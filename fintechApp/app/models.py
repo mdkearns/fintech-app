@@ -8,6 +8,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django import forms
 from django.core.files.storage import FileSystemStorage
+import json
 
 class UserMadeGroup(models.Model):
     """
@@ -24,6 +25,10 @@ class UserMadeGroup(models.Model):
 
     def remove_user(group, user):
         UserMadeGroup.objects.get(group_name=group).members.remove(User.objects.get(username=user))
+
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+            sort_keys=True, indent=4)
 
 
 class ReportFile(models.Model):

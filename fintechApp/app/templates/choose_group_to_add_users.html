@@ -1,12 +1,12 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h2>Add Users</h2>
+  <h2>Choose Group</h2>
   {% if user.is_authenticated %}
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit">Add users</button>
+      <button type="submit">Choose Group</button>
     </form>
     <br></br>
     <a href="{% url 'groups'%}?next={{request.path}}">Return to Groups</a>
