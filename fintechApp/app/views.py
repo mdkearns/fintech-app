@@ -10,7 +10,7 @@ from django.contrib.auth import authenticate
 from django.forms import *
 from django.contrib.auth.decorators import permission_required
 from django.views.generic.edit import UpdateView
-
+from time import gmtime, strftime
 
 
 # Create your views here.
@@ -143,7 +143,7 @@ def display_report(request):
 
 class reports(generic.ListView):
     model = Report
-    paginate_by = 10
+    paginate_by = 20
     context_object_name = 'user_reports'
     queryset = Report.objects.all()
     template_name = 'report_list.html'
@@ -165,16 +165,37 @@ def add_report(request):
         if modelForm.is_valid():
             obj = modelForm.save(commit=False)
             obj.companyUser = request.user
+            obj.timeStamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+            
             obj.save()
+            modelForm.save_m2m()
             modelForm = ReportForm()
     else:
         modelForm = ReportForm( user=request.user)
 
     return render(request, 'add_report.html', {'modelForm': modelForm})
 
+
+@permission_required('app.add_report')
+def add_reportFile(request):
+    print(request.FILES)
+    if request.method == "POST":
+        modelForm = ReportFileForm(request.POST, request.FILES)
+        if modelForm.is_valid():
+            obj = modelForm.save(commit=False)
+            obj.companyUser = request.user
+            obj.save()
+            modelForm = ReportForm()
+    else:
+        modelForm = ReportFileForm()
+
+    return render(request, 'add_ReportFile.html', {'modelForm': modelForm})
+
 class reportDetail(generic.DetailView):
     model = Report
+    context_object_name = 'report'
     template_name = 'report_detail.html'
+
 
 def suspend_user(request):
     if request.method == "POST":
