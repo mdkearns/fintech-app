@@ -12,6 +12,8 @@ from django.contrib.auth.decorators import permission_required
 from django.views.generic.edit import UpdateView
 from time import gmtime, strftime
 import json
+import operator
+from django.db.models import Q
 
 
 # Create your views here.
@@ -148,6 +150,34 @@ class reports(generic.ListView):
     context_object_name = 'user_reports'
     queryset = Report.objects.all()
     template_name = 'report_list.html'
+
+class reportSearchListView(generic.ListView):
+    model = Report
+    paginate_by = 10
+    template_name = 'report_list.html'
+    context_object_name = 'user_reports'
+
+    def get_queryset(self):
+        result = Report.objects.all()
+        reportName = self.request.GET.get('reportName')
+        reportNameExact = self.request.GET.get('reportNameExact')
+        companyName = self.request.GET.get('companyName')
+        companyNameExact = self.request.GET.get('companyNameExact')
+        myReports = self.request.GET.get('myReports')
+
+        if reportNameExact and reportName:
+            result = result.filter(reportName = reportName)
+        elif reportName:
+            result = result.filter(reportName__contains = reportName)
+        if companyNameExact and companyName:
+            result = result.filter(companyName = companyName)
+        elif companyName:
+            result = result.filter(companyName__contains = companyName)
+        if myReports:
+            result = result.filter(companyUser = self.request.user)
+
+
+        return result
 
 class groups(generic.ListView):
     model = UserMadeGroup
