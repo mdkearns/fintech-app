@@ -11,8 +11,6 @@
         </li>
         {% endfor %}
         <br><br><br><br>
-        <a href="{{ group.get_absolute_url }}/add_users_to_group">Add users to this group</a>
-        <br><br><br><br>
         <a href="{% url 'groups'%}?next={{request.path}}">Return to Groups</a>
         <div style="margin-left:20px;margin-top:20px">
         </div>
