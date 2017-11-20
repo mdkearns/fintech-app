@@ -84,7 +84,7 @@ class ReportForm(ModelForm):
         files = forms.ModelMultipleChoiceField(queryset=None)
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', User.objects.get(pk_of_default_user))
+        user = kwargs.pop('user')
         super(ReportForm, self).__init__(*args, **kwargs)
         self.fields['files'].queryset = ReportFile.objects.filter(companyUser = user)
 

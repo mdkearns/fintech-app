@@ -171,7 +171,7 @@ def add_report(request):
             modelForm.save_m2m()
             modelForm = ReportForm()
     else:
-        modelForm = ReportForm()
+        modelForm = ReportForm( user=request.user)
 
     return render(request, 'add_report.html', {'modelForm': modelForm})
 
