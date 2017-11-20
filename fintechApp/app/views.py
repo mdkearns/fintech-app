@@ -144,7 +144,7 @@ def display_report(request):
 
 class reports(generic.ListView):
     model = Report
-    paginate_by = 20
+    paginate_by = 10
     context_object_name = 'user_reports'
     queryset = Report.objects.all()
     template_name = 'report_list.html'
