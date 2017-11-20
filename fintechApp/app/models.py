@@ -23,14 +23,6 @@ class UserMadeGroup(models.Model):
     def get_absolute_url(self):
         return reverse('group_detail', args=[str(self.id)])
 
-    def remove_user(group, user):
-        UserMadeGroup.objects.get(group_name=group).members.remove(User.objects.get(username=user))
-
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__,
-            sort_keys=True, indent=4)
-
-
 class ReportFile(models.Model):
     companyUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=50, default="NO_NAME")
@@ -78,6 +70,15 @@ class Report(models.Model):
             ('can_view_reports', "Can view reports"),
             ('can_change_reports', "Can change reports")
         )
+
+class Message(models.Model):
+    message_subject = models.CharField(max_length = 200, blank = False)
+    message_text = models.TextField(blank = False)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'sender')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'receiver')
+
+    def get_absolute_url(self):
+        return reverse('message_detail', args=[str(self.id)])
 
 class ReportForm(ModelForm):
     class Meta:

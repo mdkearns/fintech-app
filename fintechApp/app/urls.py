@@ -20,4 +20,6 @@ urlpatterns = [
     url(r'^groups/create_group', views.add_group, name='create_group'),
     url(r'^groups/choose_group_to_add_users', views.choose_group_to_add_users, name='choose_group_to_add_users'),
     url(r'^add_sm/', views.add_sm, name='add_sm'),
+    url(r'^messages/$', views.messages.as_view(), name='messages'),
+    url(r'^messages/(?P<pk>\d+)$', views.message_detail.as_view(), name='message_detail'),
 ]

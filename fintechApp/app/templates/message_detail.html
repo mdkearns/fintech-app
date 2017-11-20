@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+
+        <h3>Subject: {{ message.message_subject }}</h3>
+        <p>From: {{message.sender.username}}</p>
+        <br><br>
+        <p>{{message.message_text}}</p>
+        <br><br>
+        <a href="{% url 'messages'%}?next={{request.path}}">Return to Messages</a>
+        <div style="margin-left:20px;margin-top:20px">
+        </div>
+    {% else %}
+        <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
+    {% endif %}
+
+{% endblock %}

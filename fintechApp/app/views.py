@@ -158,6 +158,20 @@ class groups(generic.ListView):
     def get_queryset(self):
         return UserMadeGroup.objects.filter(members=self.request.user)
 
+class messages(generic.ListView):
+    model = Message
+    paginate_by = 10
+    context_object_name = 'messages'
+    template_name = 'view_messages.html'
+
+    def get_queryset(self):
+        return Message.objects.filter(receiver=self.request.user)
+
+class message_detail(generic.detail.DetailView):
+    model = Message
+    context_object_name = 'message'
+    template_name = 'message_detail.html'
+
 
 @permission_required('app.add_report')
 def add_report(request):
