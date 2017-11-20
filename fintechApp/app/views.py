@@ -169,7 +169,7 @@ def add_report(request):
             
             obj.save()
             modelForm.save_m2m()
-            modelForm = ReportForm()
+            modelForm = ReportForm(user=request.user)
     else:
         modelForm = ReportForm( user=request.user)
 
@@ -185,7 +185,7 @@ def add_reportFile(request):
             obj = modelForm.save(commit=False)
             obj.companyUser = request.user
             obj.save()
-            modelForm = ReportForm()
+            modelForm = ReportFileForm()
     else:
         modelForm = ReportFileForm()
 

@@ -6,8 +6,8 @@
     <form method="post">
       {% csrf_token %}
       {{ modelForm.as_p }}
-      <a href="{% url 'add_reportFile'%}">Add ReportFile</a>
-      <br><br>
+      <a href="{% url 'add_reportFile'%}">Add new ReportFile</a>
+      <br><br><br><br>
       <button type="submit">Submit Report</button>
     </form>
   {% else %}

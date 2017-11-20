@@ -8,6 +8,8 @@
       {{ modelForm.as_p }}
       <button type="submit">Submit ReportFile</button>
     </form>
+    <br><br><br>
+    <a href="{% url 'create_report'%}">Back to new Report</a>
   {% else %}
     <p>Your account doesn't have access to this page. To proceed,
       please login with an account that has access.</p>
