@@ -51,7 +51,7 @@ class Report(models.Model):
     industry = models.CharField(max_length=50)
     # currentProjects =
     accessType = models.CharField(max_length=7, choices=(("private", "private"), ("public", "public")), default="public")
-    files = models.ManyToManyField(ReportFile, null=True, blank=True)
+    files = models.ManyToManyField(ReportFile, blank=True)
 
     def __str__(self):
         return self.reportName + self.sector
