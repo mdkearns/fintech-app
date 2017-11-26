@@ -1,7 +1,7 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<h1 id="reportListTitle">View Reports</h1>
+<h1 id="reportListTitle">View Reports</h1> 
     {% if user.is_authenticated %}
     <form id="reportSearch" action="{% url 'reports_search' %}"  method="get" accept-charset="utf-8">
         <h2>Search</h2>
@@ -32,7 +32,8 @@
         <input name="myReports" type="checkbox"> only my reports
         <br><br>
         <button type="submit">Search</button>
-        <br>
+        <br><br>
+        <a href="{% url 'reports'%}?next={{request.path}}">Clear Search</a>
     </form>
         {% if user_reports %}
         <ul id="reportList">

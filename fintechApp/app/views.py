@@ -162,6 +162,7 @@ class reportSearchListView(generic.ListView):
         result = Report.objects.all()
         reportName = self.request.GET.get('reportName')
         reportNameExact = self.request.GET.get('reportNameExact')
+        print(reportNameExact)
         dateRange = self.request.GET.get('daterange')
         dates = dateRange.split(" - ")
         dateStart = datetime.strptime(dates[0].lower(), '%m/%d/%Y %I:%M %p')
