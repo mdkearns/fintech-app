@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^groups/choose_group_to_add_users', views.choose_group_to_add_users, name='choose_group_to_add_users'),
     url(r'^messages/$', views.messages.as_view(), name='messages'),
     url(r'^messages/(?P<pk>\d+)$', views.message_detail.as_view(), name='message_detail'),
+    url(r'^messages/send_message$', views.send_message, name='send_message'),
 ]

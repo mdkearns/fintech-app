@@ -360,3 +360,21 @@ def choose_group_to_add_users(request):
         form = ChooseGroupToAddUsersForm(request=request)
 
     return render(request, 'choose_group_to_add_users.html', {'form': form})
+
+def send_message(request):
+    if request.method == "POST":
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message_subject = form.cleaned_data.get('message_subject')
+            message_text = form.cleaned_data.get('message_text')
+            encrypted = form.cleaned_data.get('encrypted')
+            sender = request.user
+            receiver = form.cleaned_data.get('receiver')
+
+            new_message = Message.objects.create(message_subject=message_subject, message_text=message_text, encrypted=encrypted, receiver=receiver, sender=sender)
+
+            # redirect, or however you want to get to the main view
+            return HttpResponseRedirect(reverse('messages'))
+    else:
+        form = MessageForm()
+    return render(request, 'send_message.html', {'form': form})

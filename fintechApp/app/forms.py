@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Report, UserMadeGroup
+from .models import Report, UserMadeGroup, Message
 import json
 from collections import namedtuple
 from types import SimpleNamespace as Namespace
@@ -59,3 +59,8 @@ class AddUserToUserMadeGroupForm(forms.Form):
 
         self.fields['users'].queryset=User.objects.filter(username__in=users)
         self.fields['users'].label = 'Select the users you would like to add to this group'
+
+class MessageForm(ModelForm):
+    class Meta:
+        model = Message
+        fields = ['receiver', 'message_subject', 'message_text', 'encrypted']
