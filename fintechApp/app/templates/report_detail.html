@@ -2,16 +2,60 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-        <h1>{{ report.reportName }}</h1>
-        <p>Created by: <b>{{ report.companyUser }}</b> on {{ report.timeStamp }}</p>
-        <p>Company: {{ report.companyName }}</p>
-        <p>Company CEO: {{ report.companyCEO }}</p>
-        <p>Location: {{ report.companyLocation }}, {{ report.companyCountry }}</p>
-        <p>Phone: {{ report.companyPhone }}</p>
-        <p>Sector: {{ report.sector }}</p>
-        <p>Industry: {{ report.industry }}</p>
-        <p>Files: {% for file in report.files.all %}{{file}}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-        <br><br><br><br>
+    <table class="table table-hover table-responsive table-fixed">
+        <thead>
+          <tr>
+            <th colspan="3" ><h1>{{ report.reportName }}</h1></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Company Name</th>
+            <td colspan="2">{{ report.companyName }}</td>
+          </tr>
+          <tr>
+            <th scope="row">CEO</th>
+            <td colspan="2">{{ report.companyCEO }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Company Phone</th>
+            <td colspan="2">{{ report.companyPhone }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Company Email</th>
+            <td colspan="2">{{ report.companyEmail }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Company Location</th>
+            <td colspan="2">{{ report.companyLocation }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Company Country</th>
+            <td colspan="2">{{ report.companyCountry }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Sector</th>
+            <td colspan="2">{{ report.sector }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Industry</th>
+            <td colspan="2">{{ report.industry }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Current Project(s)</th>
+            <td colspan="2">{{ report.currentProjects }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Private Report</th>
+            <td colspan="2">{% if report.accessType == "private" %} Yes {% else %} No {% endif %}</td>
+          </tr>
+          <tr>
+            <th scope="row">Files Attached</th>
+            <td colspan="2">{% for file in report.files.all %}{{file}}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+          </tr>
+        </tbody>
+      </table>
+        <br><br>
         <a href="{% url 'reports'%}?next={{request.path}}">Return to Reports</a>
         <div style="margin-left:20px;margin-top:20px">
         </div>

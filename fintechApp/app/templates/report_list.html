@@ -29,6 +29,8 @@
         <input name="industry" type="text" placeholder="Industry">
         <input name="industryExact" type="checkbox"> is exact
         <br><br>
+        <input name="currentProjects" type="text" placeholder="Current Projects Contains">
+        <br><br>
         <input name="myReports" type="checkbox"> only my reports
         <br><br>
         <button type="submit">Search</button>
@@ -39,10 +41,20 @@
         <ul id="reportList">
 
         {% for report in user_reports %}
-        <li>
+        <div id = "reportCards" class="card text-center">
+            <div class="card-block">
+              <h4 class="card-title">{{ report.reportName }}</h4>
+              <p class="card-text">Created by: <b>{{ report.companyUser }}</b> on {{ report.timeStamp }}</p>
+              <a href="{{ report.get_absolute_url }}" class="btn btn-primary">Detail View</a>
+            </div>
+            <!-- <div class="card-footer text-muted">
+              2 days ago
+            </div> -->
+          </div>
+        <!-- <li>
             <a href="{{ report.get_absolute_url }}">
                 {{ report.reportName }}</a> ({{report.companyUser}})
-        </li>
+        </li> -->
         {% endfor %}
 
         </ul>

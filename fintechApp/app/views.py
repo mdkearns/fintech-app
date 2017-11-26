@@ -147,7 +147,7 @@ def display_report(request):
 
 class reports(generic.ListView):
     model = Report
-    paginate_by = 10
+    paginate_by = 4
     context_object_name = 'user_reports'      
     template_name = 'report_list.html'
     
@@ -161,7 +161,7 @@ class reports(generic.ListView):
 
 class reportSearchListView(generic.ListView):
     model = Report
-    paginate_by = 10
+    paginate_by = 4
     template_name = 'report_list.html'
     context_object_name = 'user_reports'
 
@@ -189,6 +189,7 @@ class reportSearchListView(generic.ListView):
         sectorExact = self.request.GET.get('sectorExact')
         industry = self.request.GET.get('industry')
         industryExact = self.request.GET.get('industryExact')
+        currentProjects = self.request.GET.get('currentProjects')
         myReports = self.request.GET.get('myReports')
 
         if reportNameExact and reportName:
@@ -221,6 +222,8 @@ class reportSearchListView(generic.ListView):
             result = result.filter(industry = industry)
         elif industry:
             result = result.filter(industry__contains = industry)
+        if currentProjects:
+            result = result.filter(currentProjects__contains = currentProjects)
         if myReports:
             result = result.filter(companyUser = self.request.user)
 

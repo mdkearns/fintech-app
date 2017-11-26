@@ -6,11 +6,11 @@
 }
 
 #reportListTitle {
-    padding-left:35%;
+    padding-left:48%;
 }
 
 #reportList{
-    left:35%;
+    left:40%;
     position: absolute;
 }
 
@@ -18,4 +18,20 @@
     margin-top: 20px;
     padding: 0;
     list-style: none;
+}
+
+#reportCards {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    padding: 10px;
+    margin: 15px;
+}
+
+.pagination{
+    position: absolute;
+    top:90%;
+    left:44%;
+}
+
+#reportTable{
+    border: black 1px;
 }

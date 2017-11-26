@@ -47,11 +47,12 @@ class Report(models.Model):
     timeStamp = models.DateTimeField(null=True, blank=True)
     companyName = models.CharField(max_length=50)
     companyPhone = models.CharField(max_length=12)
+    companyEmail = models.CharField(max_length=50)
     companyLocation = models.CharField(max_length=50)
     companyCountry = models.CharField(max_length=3, choices=COUNTRY_CHOICES, default="US")
     sector = models.CharField(max_length=50)
     industry = models.CharField(max_length=50)
-    # currentProjects =
+    currentProjects = models.CharField(max_length=200)
     accessType = models.CharField(max_length=7, choices=(("private", "private"), ("public", "public")), default="public")
     files = models.ManyToManyField(ReportFile, blank=True)
 

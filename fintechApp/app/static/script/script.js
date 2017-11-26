@@ -3,6 +3,10 @@ function pageScript(){
         $('#content-container').css("padding-left", "0");
     }
 
+    if(window.location.pathname.substr(0,12) == "/app/report/"){
+        $('#content-container').css("padding-left", "20%");
+    }
+
     if(window.location.pathname == "/app/reports_search/"){
         var query = location.search.substr(1);
         var result = {};
@@ -44,7 +48,7 @@ function pageScript(){
         $("[name='companyCountry']")[0].value = result['companyCountry'];
         $("[name='sector']")[0].value = result['sector'];
         $("[name='industry']")[0].value = result['industry'];
-
+        $("[name='currentProjects']")[0].value = result['currentProjects'];
 
     }
 
