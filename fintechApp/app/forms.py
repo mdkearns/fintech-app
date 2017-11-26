@@ -65,12 +65,13 @@ class MessageForm(ModelForm):
         model = Message
         fields = ['receiver', 'message_subject', 'message_text', 'encrypted']
 
-class RemoveUserMadeGroupForm(forms.Form):
+class DeleteMessageForm(forms.Form):
     request = None
-    usermadegroups = forms.ModelMultipleChoiceField(queryset=None)
+    messages = forms.ModelMultipleChoiceField(queryset=None)
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request")
-        super(RemoveUserMadeGroupForm, self).__init__(*args, **kwargs)
-        self.fields['usermadegroups'].queryset=UserMadeGroup.objects.filter(members=self.request.user)
-        self.fields['usermadegroups'].label = 'Groups you belong to'
+        super(DeleteMessageForm, self).__init__(*args, **kwargs)
+        self.fields['messages'].queryset=Message.objects.filter(receiver=self.request.user)
+        self.fields['messages'].label = 'Your Messages'
+        self.fields['messages'].label_from_instance = lambda obj: "%s" % obj.message_subject

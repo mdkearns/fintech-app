@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>Delete Message(s)</h2>
+  {% if user.is_authenticated %}
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Delete Message(s)</button>
+    </form>
+    <br></br>
+    <a href="{% url 'messages'%}?next={{request.path}}">Return to Messages</a>
+  {% else %}
+    <p>Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.</p>
+  {% endif %}
+
+{% endblock %}

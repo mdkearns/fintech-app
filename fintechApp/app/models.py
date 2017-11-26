@@ -79,12 +79,12 @@ class Report(models.Model):
         )
 
 class Message(models.Model):
+    unique_id = models.UUIDField(default=uuid4, editable=False, unique=True)
     message_subject = models.CharField(max_length = 200, blank = False)
     message_text = models.TextField(blank = False)
     encrypted = models.BooleanField(default = False)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'sender')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'receiver')
-    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
 
     def get_absolute_url(self):
         return reverse('message_detail', args=[str(self.id)])

@@ -378,3 +378,18 @@ def send_message(request):
     else:
         form = MessageForm()
     return render(request, 'send_message.html', {'form': form})
+
+def delete_message(request):
+    if request.method == "POST":
+        form = DeleteMessageForm(request.POST, request=request)
+        if form.is_valid():
+            messages = form.cleaned_data.get('messages')
+            current_user = request.user
+            for message in messages:
+                id=message.unique_id
+                Message.objects.filter(unique_id=id).delete()
+            # redirect, or however you want to get to the main view
+            return HttpResponseRedirect(reverse('messages'))
+    else:
+        form = DeleteMessageForm(request=request)
+    return render(request, 'delete_message.html', {'form': form})
