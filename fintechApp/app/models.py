@@ -9,6 +9,7 @@ from django.dispatch import receiver
 from django import forms
 from django.core.files.storage import FileSystemStorage
 import json
+from uuid import uuid4
 
 class UserMadeGroup(models.Model):
     """
@@ -83,6 +84,7 @@ class Message(models.Model):
     encrypted = models.BooleanField(default = False)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'sender')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'receiver')
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
 
     def get_absolute_url(self):
         return reverse('message_detail', args=[str(self.id)])

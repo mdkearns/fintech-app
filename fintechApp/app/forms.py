@@ -64,3 +64,13 @@ class MessageForm(ModelForm):
     class Meta:
         model = Message
         fields = ['receiver', 'message_subject', 'message_text', 'encrypted']
+
+class RemoveUserMadeGroupForm(forms.Form):
+    request = None
+    usermadegroups = forms.ModelMultipleChoiceField(queryset=None)
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request")
+        super(RemoveUserMadeGroupForm, self).__init__(*args, **kwargs)
+        self.fields['usermadegroups'].queryset=UserMadeGroup.objects.filter(members=self.request.user)
+        self.fields['usermadegroups'].label = 'Groups you belong to'
