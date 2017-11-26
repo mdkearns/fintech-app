@@ -148,9 +148,16 @@ def display_report(request):
 class reports(generic.ListView):
     model = Report
     paginate_by = 10
-    context_object_name = 'user_reports'
-    queryset = Report.objects.all()
+    context_object_name = 'user_reports'      
     template_name = 'report_list.html'
+    
+    def get_queryset(self):
+        result = Report.objects.all()
+
+        if(self.request.user.groups.filter(name='Site Manager').exists() == False):
+            result = result.filter(Q(accessType = "public") | Q(companyUser = self.request.user))
+
+        return result
 
 class reportSearchListView(generic.ListView):
     model = Report
@@ -160,9 +167,12 @@ class reportSearchListView(generic.ListView):
 
     def get_queryset(self):
         result = Report.objects.all()
+
+        if(self.request.user.groups.filter(name='Site Manager').exists() == False):
+            result = result.filter(Q(accessType = "public") | Q(companyUser = self.request.user))
+
         reportName = self.request.GET.get('reportName')
         reportNameExact = self.request.GET.get('reportNameExact')
-        print(reportNameExact)
         dateRange = self.request.GET.get('daterange')
         dates = dateRange.split(" - ")
         dateStart = datetime.strptime(dates[0].lower(), '%m/%d/%Y %I:%M %p')
@@ -213,7 +223,6 @@ class reportSearchListView(generic.ListView):
             result = result.filter(industry__contains = industry)
         if myReports:
             result = result.filter(companyUser = self.request.user)
-
 
         return result
 
@@ -280,6 +289,14 @@ class reportDetail(generic.DetailView):
     model = Report
     context_object_name = 'report'
     template_name = 'report_detail.html'
+
+    def get_queryset(self):
+        queryset = super(reportDetail, self).get_queryset()
+
+        if(self.request.user.groups.filter(name='Site Manager').exists() == False):
+            queryset = queryset.filter(Q(accessType = "public") | Q(companyUser = self.request.user))
+
+        return queryset
 
 
 def suspend_user(request):
