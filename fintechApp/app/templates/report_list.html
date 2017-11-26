@@ -1,26 +1,41 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<h1>View Reports</h1>
+<h1 id="reportListTitle">View Reports</h1>
     {% if user.is_authenticated %}
-    <button id="showSearch" onClick="toggleSearch(true)">Show Search</button>
     <form id="reportSearch" action="{% url 'reports_search' %}"  method="get" accept-charset="utf-8">
-        <button id="hideSearch" onClick="toggleSearch(false)">Hide Search</button>
-        <br><br>
+        <h2>Search</h2>
+        <br>
         <input name="reportName" type="text" placeholder="Report Name">
         <input name="reportNameExact" type="checkbox"> is exact
-        <br>
+        <br><br>
+        <input type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2018 2:00 PM" />
+        <br><br>
         <input name="companyName" type="text" placeholder="Company Name">
         <input name="companyNameExact" type="checkbox"> is exact
-        <br>
+        <br><br>
+        <input name="companyCEO" type="text" placeholder="Company CEO">
+        <input name="companyCEOExact" type="checkbox"> is exact
+        <br><br>
+        <input name="companyLocation" type="text" placeholder="Company Location">
+        <input name="companyLocationExact" type="checkbox"> is exact
+        <br><br>
+        <input name="companyCountry" type="text" placeholder="Company Country">
+        <input name="companyCountryExact" type="checkbox"> is exact
+        <br><br>
+        <input name="sector" type="text" placeholder="Sector">
+        <input name="sectorExact" type="checkbox"> is exact
+        <br><br>
+        <input name="industry" type="text" placeholder="Industry">
+        <input name="industryExact" type="checkbox"> is exact
+        <br><br>
         <input name="myReports" type="checkbox"> only my reports
         <br><br>
         <button type="submit">Search</button>
         <br>
     </form>
-    <br><br>
         {% if user_reports %}
-        <ul>
+        <ul id="reportList">
 
         {% for report in user_reports %}
         <li>
@@ -32,7 +47,7 @@
         </ul>
 
         {% else %}
-        <p>There are no reports.</p>
+        <p id="reportList">There are no reports.</p>
         {% endif %}       
     {% endif %}
 {% endblock %}

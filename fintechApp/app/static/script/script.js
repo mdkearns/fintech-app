@@ -1,10 +1,15 @@
-function toggleSearch(toggle){
-    if(toggle){
-        document.getElementById('reportSearch').style.display = 'inline'; 
-        document.getElementById('showSearch').style.display = 'none';
+function pageScript(){
+    if(window.location.pathname == "/app/reports/" || window.location.pathname == "/app/reports_search/"){
+        $('#content-container').css("padding-left", "0");
     }
-    else{
-        document.getElementById('reportSearch').style.display = 'none'; 
-        document.getElementById('showSearch').style.display = 'inline';
-    }
+    
+    $(function() {
+        $('input[name="daterange"]').daterangepicker({
+            timePicker: true,
+            timePickerIncrement: 30,
+            locale: {
+                format: 'MM/DD/YYYY h:mm A'
+            }
+        });
+    });
 }

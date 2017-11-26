@@ -14,6 +14,7 @@ from time import gmtime, strftime
 import json
 import operator
 from django.db.models import Q
+from datetime import datetime
 
 
 # Create your views here.
@@ -161,18 +162,54 @@ class reportSearchListView(generic.ListView):
         result = Report.objects.all()
         reportName = self.request.GET.get('reportName')
         reportNameExact = self.request.GET.get('reportNameExact')
+        dateRange = self.request.GET.get('daterange')
+        dates = dateRange.split(" - ")
+        dateStart = datetime.strptime(dates[0].lower(), '%m/%d/%Y %I:%M %p')
+        dateEnd = datetime.strptime(dates[1].lower(), '%m/%d/%Y %I:%M %p')
         companyName = self.request.GET.get('companyName')
         companyNameExact = self.request.GET.get('companyNameExact')
+        companyCEO = self.request.GET.get('companyCEO')
+        companyCEOExact = self.request.GET.get('companyCEOExact')
+        companyLocation = self.request.GET.get('companyLocation')
+        companyLocationExact = self.request.GET.get('companyLocationExact')
+        companyCountry = self.request.GET.get('companyCountry')
+        companyCountryExact = self.request.GET.get('companyCountryExact')
+        sector = self.request.GET.get('sector')
+        sectorExact = self.request.GET.get('sectorExact')
+        industry = self.request.GET.get('industry')
+        industryExact = self.request.GET.get('industryExact')
         myReports = self.request.GET.get('myReports')
 
         if reportNameExact and reportName:
             result = result.filter(reportName = reportName)
         elif reportName:
             result = result.filter(reportName__contains = reportName)
+        if dateRange:
+            result = result.filter(timeStamp__range= [dateStart, dateEnd])
         if companyNameExact and companyName:
             result = result.filter(companyName = companyName)
         elif companyName:
             result = result.filter(companyName__contains = companyName)
+        if companyCEOExact and companyCEO:
+            result = result.filter(companyCEO = companyCEO)
+        elif companyCEO:
+            result = result.filter(companyCEO__contains = companyCEO)
+        if companyLocationExact and companyLocation:
+            result = result.filter(companyLocation = companyLocation)
+        elif companyLocation:
+            result = result.filter(companyLocation__contains = companyLocation)
+        if companyCountryExact and companyCountry:
+            result = result.filter(companyCountry = companyCountry)
+        elif companyCountry:
+            result = result.filter(companyCountry__contains = companyCountry)
+        if sectorExact and sector:
+            result = result.filter(sector = sector)
+        elif sector:
+            result = result.filter(sector__contains = sector)
+        if industryExact and industry:
+            result = result.filter(industry = industry)
+        elif industry:
+            result = result.filter(industry__contains = industry)
         if myReports:
             result = result.filter(companyUser = self.request.user)
 

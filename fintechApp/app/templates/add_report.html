@@ -1,8 +1,9 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h2>New Report</h2>
+  <h2 >New Report</h2>
   {% if user.is_authenticated %}  
+    <script>viewReports();</script>
     <form method="post">
       {% csrf_token %}
       {{ modelForm.as_p }}
