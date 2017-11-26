@@ -23,7 +23,7 @@ def index(request):
     """
     View Function for home page of site
     """
-    print(ReportFile.objects.filter(companyUser = request.user))
+    # print(ReportFile.objects.filter(companyUser = request.user))
     # print(request.user)
     # x = Group.objects.get(name= "Company User")
     # print(x)

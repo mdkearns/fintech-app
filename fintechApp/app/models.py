@@ -80,6 +80,7 @@ class Report(models.Model):
 class Message(models.Model):
     message_subject = models.CharField(max_length = 200, blank = False)
     message_text = models.TextField(blank = False)
+    encrypted = models.BooleanField(default = False)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'sender')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'receiver')
 
