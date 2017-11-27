@@ -57,7 +57,7 @@ class Report(models.Model):
     files = models.ManyToManyField(ReportFile, blank=True)
 
     def __str__(self):
-        return self.reportName + self.sector
+        return self.reportName
 
     def display_for_fda(self):
         text = "Report: " + str(self.reportName) + "\n"
@@ -127,6 +127,9 @@ class AddToGroupForm(forms.Form):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     suspended = models.BooleanField(default=False)
+
+class DeleteReportForm(forms.Form):
+    report = forms.ModelChoiceField(queryset=Report.objects.all(), empty_label=None)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

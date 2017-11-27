@@ -148,9 +148,9 @@ def display_report(request):
 class reports(generic.ListView):
     model = Report
     paginate_by = 4
-    context_object_name = 'user_reports'      
+    context_object_name = 'user_reports'
     template_name = 'report_list.html'
-    
+
     def get_queryset(self):
         result = Report.objects.all()
 
@@ -451,3 +451,15 @@ def delete_message(request):
     else:
         form = DeleteMessageForm(request=request)
     return render(request, 'delete_message.html', {'form': form})
+
+def delete_report(request):
+    if request.method == "POST":
+        form = DeleteReportForm(request.POST)
+        if form.is_valid():
+            report = form.cleaned_data.get('report')
+            Report.objects.filter(reportName=report).delete()
+            return render(request, 'delete_report.html', {'form': form})
+    else:
+        form = DeleteReportForm()
+    return render(request, 'delete_report.html', {'form': form})
+
