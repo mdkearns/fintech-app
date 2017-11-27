@@ -1,4 +1,5 @@
 from tkinter import *
+from functools import partial
 import tkinter.messagebox as message
 import requests
 
@@ -67,32 +68,47 @@ class LoginGUI(Frame):
         super().__init__(self.master)
 		
         welcome_message = "\nWelcome, " + str(login['username']) + "!\n"
-        reports_message = "The following reports are available for viewing:\n"
+
+        if reports[0] != '':
+            reports_message = "The following reports are available for viewing:\n"
+            self.message_label = Label(self, text=welcome_message, justify=CENTER)
+            self.reports_label = Label(self, text=reports_message, justify=CENTER)
+            self.message_label.grid(columnspan=2)
+            self.reports_label.grid(columnspan=2)
 		
-        self.message_label = Label(self, text=welcome_message, justify=CENTER)
-        self.reports_label = Label(self, text=reports_message, justify=CENTER)
-        self.message_label.grid(columnspan=2)
-        self.reports_label.grid(columnspan=2)
+            self.pack()
+            r = 2
+			
+            for report in reports:
+                self.report_label = Label(self, text=report, justify=CENTER)
+                self.report_label.grid(row=r, sticky=E)
+                self.report_select = Button(self, text="View " + report, command = lambda: self.view_report(report))
+                self.report_select.grid(row=r, column=1)
+                r += 1
+                self.pack()
+			
+            self.space = Label(self, text="\n", justify=CENTER)
+            self.space.grid(row=4)
 		
-        self.pack()
+            self.pack()
+        else:
+            reports_message = "You have no available reports to view."
 		
-        for report in reports:
-            self.report_label = Label(self, text=report, justify=CENTER)
-            self.report_label.grid(row=2, sticky=E)
-            self.report_select = Button(self, text="View Report", command = self.view_report)
-            self.report_select.grid(row=2, column=1)
+            self.message_label = Label(self, text=welcome_message, justify=CENTER)
+            self.reports_label = Label(self, text=reports_message, justify=CENTER)
+            self.message_label.grid(columnspan=2)
+            self.reports_label.grid(columnspan=2)
+		
             self.pack()
 			
-        self.space = Label(self, text="\n", justify=CENTER)
-        self.space.grid(row=4)
 		
-        self.pack()
-		
-    def view_report(self):
+    def view_report(self, report_name):
 	    self.destroy()
 	    super().__init__(self.master)
 		
-	    self.login['report'] = "Report 1"
+	    self.login['report'] = report_name
+	    print(report_name)
+		
 	    report_text = requests.get('http://127.0.0.1:8000/app/display_reports', params=self.login)
 	    
 	    self.details_label = Label(self, text="\nReport Details:\n\n"+report_text.text+"\n")
