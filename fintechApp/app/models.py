@@ -43,9 +43,9 @@ class ReportFile(models.Model):
 class Report(models.Model):
     reportName = models.CharField(max_length=50, default="NO_NAME")
     companyUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    companyCEO = models.CharField(max_length=50)
     timeStamp = models.DateTimeField(null=True, blank=True)
     companyName = models.CharField(max_length=50)
+    companyCEO = models.CharField(max_length=50)
     companyPhone = models.CharField(max_length=12)
     companyEmail = models.CharField(max_length=50)
     companyLocation = models.CharField(max_length=50)

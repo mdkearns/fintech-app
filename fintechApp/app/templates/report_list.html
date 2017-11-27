@@ -33,7 +33,7 @@
         <br><br>
         <input name="myReports" type="checkbox"> only my reports
         <br><br>
-        <button type="submit">Search</button>
+        <button class="btn btn-primary" type="submit">Search</button>
         <br><br>
         <a href="{% url 'reports'%}?next={{request.path}}">Clear Search</a>
     </form>
@@ -47,14 +47,7 @@
               <p class="card-text">Created by: <b>{{ report.companyUser }}</b> on {{ report.timeStamp }}</p>
               <a href="{{ report.get_absolute_url }}" class="btn btn-primary">Detail View</a>
             </div>
-            <!-- <div class="card-footer text-muted">
-              2 days ago
-            </div> -->
           </div>
-        <!-- <li>
-            <a href="{{ report.get_absolute_url }}">
-                {{ report.reportName }}</a> ({{report.companyUser}})
-        </li> -->
         {% endfor %}
 
         </ul>

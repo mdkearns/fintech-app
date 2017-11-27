@@ -51,7 +51,12 @@
           </tr>
           <tr>
             <th scope="row">Files Attached</th>
-            <td colspan="2">{% for file in report.files.all %}{{file}}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+            <td colspan="2">{% for file in report.files.all %}
+                <li>
+                {{file}}
+                <a href="../../{{file.file}}" download>download</a>
+                </li>
+                {% endfor %}</td>
           </tr>
         </tbody>
       </table>
