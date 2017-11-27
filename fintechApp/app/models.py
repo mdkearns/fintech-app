@@ -105,6 +105,12 @@ class ReportForm(ModelForm):
         super(ReportForm, self).__init__(*args, **kwargs)
         self.fields['files'].queryset = ReportFile.objects.filter(companyUser = user)
 
+class ReportForm2(ModelForm):
+    class Meta:
+        model = Report
+        fields = '__all__'
+        request = None
+
 class ReportFileForm(ModelForm):
     class Meta:
         model = ReportFile

@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate
 from django.forms import *
 from django.contrib.auth.decorators import permission_required
 from django.views.generic.edit import UpdateView
+from django.shortcuts import get_object_or_404
 from time import gmtime, strftime
 import json
 import operator
@@ -463,3 +464,35 @@ def delete_report(request):
         form = DeleteReportForm()
     return render(request, 'delete_report.html', {'form': form})
 
+def access_report(request):
+    if request.method == "POST":
+        form = DeleteReportForm(request.POST)
+        if form.is_valid():
+            rep = form.cleaned_data.get('report')
+            report = Report.objects.filter(reportName=rep).first()
+            return HttpResponseRedirect(report.get_absolute_url())
+    else:
+        form = DeleteReportForm()
+    return render(request, 'access_report.html', {'form': form})
+
+def edit_report(request):
+    if request.method == "POST":
+        form = DeleteReportForm(request.POST)
+        if form.is_valid():
+            rep = form.cleaned_data.get('report')
+            report = Report.objects.filter(reportName=rep).first()
+            return HttpResponseRedirect(report.get_absolute_url() + '/edit_report')
+    else:
+        form = DeleteReportForm()
+    return render(request, 'edit_report.html', {'form': form})
+
+def sm_edit_report(request, pk):
+    rep = get_object_or_404(Report, pk=pk)
+    if request.method == "POST":
+        form = ReportForm2(request.POST, instance=rep)
+        if form.is_valid():
+            form.save()
+            return render(request, 'edit_report.html', {'form': form})
+    else:
+        form = ReportForm2(instance=rep)
+    return render(request, 'edit_report.html', {'form': form})
