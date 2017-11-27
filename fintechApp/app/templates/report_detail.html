@@ -53,8 +53,15 @@
             <th scope="row">Files Attached</th>
             <td colspan="2">{% for file in report.files.all %}
                 <li>
+                {% if file.encrypted == False %}
+                <a href="../../{{file.file}}" download> 
+                    <span class="glyphicon glyphicon-download-alt">
+                </a>
+                &nbsp;&nbsp;
+                {% else %}
+                <span class="glyphicon glyphicon-lock">
+                {% endif %}
                 {{file}}
-                <a href="../../{{file.file}}" download>download</a>
                 </li>
                 {% endfor %}</td>
           </tr>
