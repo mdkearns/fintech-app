@@ -63,8 +63,6 @@ class LoginGUI(Frame):
 
         reports = req.text.split(',')
 
-        print(reports)
-
         super().__init__(self.master)
 		
         welcome_message = "\nWelcome, " + str(login['username']) + "!\n"
@@ -107,15 +105,15 @@ class LoginGUI(Frame):
 	    super().__init__(self.master)
 		
 	    self.login['report'] = report_name
-	    print(report_name)
 		
 	    report_text = requests.get('http://127.0.0.1:8000/app/display_reports', params=self.login)
+	    file_text = requests.get('http://127.0.0.1:8000/app/get_report_files', params=self.login)
 	    
 	    self.details_label = Label(self, text="\nReport Details:\n\n"+report_text.text+"\n")
 	    self.details_label.grid(column=0)
 		
 	    self.pack()
-	    self.files_label = Label(self, text="\nAttached Files:\n")
+	    self.files_label = Label(self, text="\nAttached Files:\n\n"+file_text.text+"\n")
 	    self.files_label.grid(column=0)
 	    self.pack()
 		

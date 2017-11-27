@@ -145,6 +145,27 @@ def display_report(request):
 		else:
 			return HttpResponse("Invalid User.")
 
+def get_report_files(request):
+
+	if request.method == "GET":
+
+		usr = request.GET['username']
+		pwd = request.GET['password']
+		report_name = request.GET['report']
+
+		user = authenticate(username=usr, password=pwd)
+
+		if user is not None:
+		
+			files = ReportFile.objects.filter(companyUser=user)
+			file_name = ""
+			
+			for file in files:
+				file_name = str(file)
+
+			return HttpResponse(file_name)
+		else:
+			return HttpResponse("Invalid User.")			
 
 class reports(generic.ListView):
     model = Report

@@ -58,6 +58,9 @@ class Report(models.Model):
 
     def __str__(self):
         return self.reportName
+		
+    def get_files(self):
+        return self.files
 
     def display_for_fda(self):
         text = "Report: " + str(self.reportName) + "\n"
