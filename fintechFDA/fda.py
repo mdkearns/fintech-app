@@ -106,6 +106,9 @@ class LoginGUI(Frame):
 		
 	    self.login['report'] = report_name
 		
+	    self.log_button = Button(self, text="Back", command = self.return_home)
+	    self.log_button.grid(row=0, column=0)
+		
 	    report_text = requests.get('http://127.0.0.1:8000/app/display_reports', params=self.login)
 	    file_text = requests.get('http://127.0.0.1:8000/app/get_report_files', params=self.login)
 	    
@@ -116,6 +119,10 @@ class LoginGUI(Frame):
 	    self.files_label = Label(self, text="\nAttached Files:\n\n"+file_text.text+"\n")
 	    self.files_label.grid(column=0)
 	    self.pack()
+		
+    def return_home(self):
+	    self.destroy()
+	    self.signed_in(self.login)
 		
 root = Tk()
 fda = LoginGUI(root)
