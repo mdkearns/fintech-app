@@ -35,3 +35,12 @@
 #reportTable{
     border: black 1px;
 }
+
+.badge-notify{
+    background:grey;
+    position:relative;
+    top: -15px;
+    left: -20px;
+    margin-right: -13px;
+    min-width: 6px;
+ }

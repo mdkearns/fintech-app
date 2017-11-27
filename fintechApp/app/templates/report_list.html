@@ -44,8 +44,15 @@
         <div id = "reportCards" class="card text-center">
             <div class="card-block">
               <h4 class="card-title">{{ report.reportName }}</h4>
-              <p class="card-text">Created by: <b>{{ report.companyUser }}</b> on {{ report.timeStamp }}</p>
-              <a href="{{ report.get_absolute_url }}" class="btn btn-primary">Detail View</a>
+              <p class="card-text">Created by: <b>{{ report.companyUser }}</b> on {{ report.timeStamp }} 
+                &nbsp; <span class="glyphicon glyphicon-file" style="float:right;">
+                        <span class="badge badge-notify">{{ report.files.count }}</span>
+                </span>
+              </p>
+              <a href="{{ report.get_absolute_url }}" class="btn btn-primary">
+                  <span class="glyphicon glyphicon-th-list"> </span>
+                  &nbsp; Detail View
+                </a>
             </div>
           </div>
         {% endfor %}
