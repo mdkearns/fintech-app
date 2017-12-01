@@ -1,3 +1,5 @@
+encFileCount = 0;
+
 function pageScript(){
     if(window.location.pathname == "/app/reports/" || window.location.pathname == "/app/reports_search/"){
         $('#content-container').css("padding-left", "0");
@@ -62,4 +64,14 @@ function pageScript(){
             }
         });
     });
+}
+
+
+function addEncCount(a){
+    if(a){
+        $('#encCount')[0].innerText = encFileCount + " encrypted files";
+    }
+    else{
+        encFileCount++;
+    }
 }
