@@ -92,6 +92,7 @@ class Message(models.Model):
     encrypted = models.BooleanField(default = False)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'sender')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'receiver')
+    encrypted_message_text = models.TextField(default="")
 
     def get_absolute_url(self):
         return reverse('message_detail', args=[str(self.id)])
@@ -155,11 +156,11 @@ class Key(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     key = RSA.generate(1024, Random.new().read)
 
-    def get_pub_key():
-        return key.publickey()
+    def get_pub_key(self):
+        return self.key.publickey()
 
-    def get_priv_key():
-        return key
+    def get_priv_key(self):
+        return self.key
 
 @receiver(post_save, sender=User)
 def create_user_key(sender, instance, created, **kwargs):

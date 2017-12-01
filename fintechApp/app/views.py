@@ -156,16 +156,16 @@ def get_report_files(request):
 		user = authenticate(username=usr, password=pwd)
 
 		if user is not None:
-		
+
 			files = ReportFile.objects.filter(companyUser=user)
 			file_name = ""
-			
+
 			for file in files:
 				file_name = str(file)
 
 			return HttpResponse(file_name)
 		else:
-			return HttpResponse("Invalid User.")			
+			return HttpResponse("Invalid User.")
 
 class reports(generic.ListView):
     model = Report
@@ -451,7 +451,11 @@ def send_message(request):
             sender = request.user
             receiver = form.cleaned_data.get('receiver')
 
-            new_message = Message.objects.create(message_subject=message_subject, message_text=message_text, encrypted=encrypted, receiver=receiver, sender=sender)
+            if encrypted is True:
+                new_message = Message.objects.create(message_subject=message_subject, message_text='This message is encrypted. Decrypt to view.', encrypted=encrypted, receiver=receiver, sender=sender, encrypted_message_text = receiver.key.get_pub_key().encrypt(message_text.encode('utf-8'), 32))
+
+            else:
+                new_message = Message.objects.create(message_subject=message_subject, message_text=message_text, encrypted=encrypted, receiver=receiver, sender=sender)
 
             # redirect, or however you want to get to the main view
             return HttpResponseRedirect(reverse('messages'))
