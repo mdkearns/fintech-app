@@ -32,4 +32,5 @@ urlpatterns = [
     url(r'^messages/(?P<pk>\d+)$', views.message_detail.as_view(), name='message_detail'),
     url(r'^messages/send_message$', views.send_message, name='send_message'),
     url(r'^messages/delete_message$', views.delete_message, name='delete_message'),
+    url(r'^messages/decrypt_message$', views.decrypt_message, name='decrypt_message')
 ]

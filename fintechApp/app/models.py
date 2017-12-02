@@ -99,6 +99,11 @@ class Message(models.Model):
     def get_absolute_url(self):
         return reverse('message_detail', args=[str(self.id)])
 
+    def decrypt(self):
+        self.should_display_unencrypted_message_text = True
+        self.message_text = self.receiver.key.decrypt(self.encrypted_message_text)
+        self.save()
+
 class ReportForm(ModelForm):
     class Meta:
         model = Report
@@ -169,7 +174,7 @@ class Key(models.Model):
         return sealed_box.encrypt(message)
 
     def decrypt(self, encrypted_message):
-        unseal_box = SealedBox(get_priv_key())
+        unseal_box = SealedBox(self.get_priv_key())
         return unseal_box.decrypt(encrypted_message)
 
 @receiver(post_save, sender=User)
