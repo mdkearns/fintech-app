@@ -41,6 +41,9 @@ function pageScript(){
         if(result['myReports']){
             $("[name='myReports']").prop("checked",true);
         }
+        if(result['favorited']){
+            $("[name='favorited']").prop("checked",true);
+        }
 
         $("[name='reportName']")[0].value = result['reportName'];
         $("[name='daterange']")[0].value = result['daterange'].split('+').join(" ");

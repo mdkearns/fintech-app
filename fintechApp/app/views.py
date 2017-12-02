@@ -214,6 +214,7 @@ class reportSearchListView(generic.ListView):
         industryExact = self.request.GET.get('industryExact')
         currentProjects = self.request.GET.get('currentProjects')
         myReports = self.request.GET.get('myReports')
+        favorited = self.request.GET.get('favorited')
 
         if reportNameExact and reportName:
             result = result.filter(reportName = reportName)
@@ -249,6 +250,8 @@ class reportSearchListView(generic.ListView):
             result = result.filter(currentProjects__contains = currentProjects)
         if myReports:
             result = result.filter(companyUser = self.request.user)
+        if favorited:
+            result = result.filter(stars=self.request.user) 
 
         return result
 
@@ -297,18 +300,15 @@ def add_report(request):
 
 
 def starReport(request, reportId, view):
+    url = request.META.get('HTTP_REFERER')
+
     report = Report.objects.filter(id = reportId).first()
     if request.user in report.stars.all():
         report.stars.remove(request.user)
     else:
         report.stars.add(request.user)
 
-    if(view == "list"):
-        return redirect("reports")
-    else:
-        return redirect("report_detail", pk=3)
-
-    return redirect("reports")
+    return HttpResponseRedirect(url)
 
 
 @permission_required('app.add_report')
