@@ -1,16 +1,41 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<h1>FinTechApp Home</h1>
-{% if user.is_authenticated %}
-  {% if user.profile.suspended %}
-    <h2>Your account has been suspended</h2>
+<div id="homeMain">
+    <h1>FinTechApp Home</h1>
+    {% if user.is_authenticated %}
+      {% if user.profile.suspended %}
+        <h2>Your account has been suspended</h2>
+      {% endif %}
+      
+      <img src="http://elitepush.com/wp-content/uploads/2016/04/the-startup-garage-non-profit-things-to-consider-for-non-profit-business-model.jpg" alt="Fintech Logo" width=600 height=375 style="PADDING-TOP: 20px;">
+</div>
+
+  <div id="favoritedHome">
+      <img id="userImage" src="https://www.1plusx.com/app/mu-plugins/all-in-one-seo-pack-pro/images/default-user-image.png">
+      <div id="usernameHome"><h4>{{ user.get_username }}</h4></div>
+      <h3>Groups</h6>
+      {% for g in request.user.groups.all %}
+        <li>{{g}}</li>
+      {% endfor %}
+    <h3>
+      <span id="star" class="glyphicon glyphicon-star" style="float:left;"></span>
+      &nbsp;Favorited Reports
+    </h3>
+      {% for report in starred %}
+        <li style="padding-left:5px;">
+            <a href="{{ report.get_absolute_url }}">
+                {{report.reportName}}
+            </a>
+        </li>
+      {% endfor %}
+  </div>
+
+  <div id="profileHome">
+      
+  </div>
+
+
   {% endif %}
-  <li>User: {{ user.get_username }}</li>
-  <h6>Group:</h6>
-  {% for g in request.user.groups.all %}
-    <li>{{g}}</li>
-  {% endfor %}
-  <img src="http://elitepush.com/wp-content/uploads/2016/04/the-startup-garage-non-profit-things-to-consider-for-non-profit-business-model.jpg" alt="Fintech Logo" width=600 height=375 style="PADDING-TOP: 20px;">
-{% endif %}
 {% endblock %}
+

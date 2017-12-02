@@ -56,3 +56,33 @@
     right:0px;
     top:40px;
 }
+
+#favoritedHome{
+    position: absolute;
+    top:0%;
+    left:5%;
+}
+
+#profileHome{
+    position: absolute;
+    top:0%;
+    left:105%;
+    padding-right: 0px;
+}
+
+#homeMain{
+    padding-left: 35%;
+}
+
+#userImage{
+    position: relative;
+    width:30%;
+    height: auto;
+}
+
+#usernameHome{
+    top: 36%;
+    left: 15%;
+    position: absolute;
+    -webkit-transform: translate(-50%, 0);
+}

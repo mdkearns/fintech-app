@@ -1,7 +1,7 @@
 encFileCount = 0;
 
 function pageScript(){
-    if(window.location.pathname == "/app/reports/" || window.location.pathname == "/app/reports_search/"){
+    if(window.location.pathname == "/app/reports/" || window.location.pathname == "/app/reports_search/" || window.location.pathname == "/app/"){
         $('#content-container').css("padding-left", "0");
     }
 
