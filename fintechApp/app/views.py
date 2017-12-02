@@ -26,15 +26,12 @@ def index(request):
     """
     View Function for home page of site
     """
-    # print(ReportFile.objects.filter(companyUser = request.user))
-    # print(request.user)
-    # x = Group.objects.get(name= "Company User")
-    # print(x)
-    # print(request.user.user_permissions.all())
-    # Render the HTML template index.html with the data in the context variable
+    starred = Report.objects.filter(stars=request.user) 
+
     return render(
         request,
-        'index.html'
+        'index.html',
+        {'starred': starred}
     )
 
 def adduser(request):
