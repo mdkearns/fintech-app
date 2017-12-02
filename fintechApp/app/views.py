@@ -296,12 +296,17 @@ def add_report(request):
     return render(request, 'add_report.html', {'modelForm': modelForm})
 
 
-def starReport(request, reportId):
+def starReport(request, reportId, view):
     report = Report.objects.filter(id = reportId).first()
     if request.user in report.stars.all():
         report.stars.remove(request.user)
     else:
         report.stars.add(request.user)
+
+    if(view == "list"):
+        return redirect("reports")
+    else:
+        return redirect("report_detail", pk=3)
 
     return redirect("reports")
 

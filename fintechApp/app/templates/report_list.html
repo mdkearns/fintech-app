@@ -44,7 +44,7 @@
         <div id = "reportCards" class="card text-center">
             <div class="card-block">
               <p style="position:absolute">
-                  <a href="{% url 'star_report' report.id %}">
+                  <a href="{% url 'star_report' report.id 'list' %}">
                     {% if user in report.stars.all %}
                     <span id="star" class="glyphicon glyphicon-star" style="float:left;">
                     {% else %}
