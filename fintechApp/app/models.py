@@ -94,6 +94,7 @@ class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'sender')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'receiver')
     encrypted_message_text = models.BinaryField()
+    should_display_unencrypted_message_text = models.BooleanField(default = False)
 
     def get_absolute_url(self):
         return reverse('message_detail', args=[str(self.id)])
