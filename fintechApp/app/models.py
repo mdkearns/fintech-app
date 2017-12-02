@@ -42,7 +42,7 @@ class ReportFile(models.Model):
 
 class Report(models.Model):
     reportName = models.CharField(max_length=50, default="NO_NAME")
-    companyUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    companyUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="companyUser")
     timeStamp = models.DateTimeField(null=True, blank=True)
     companyName = models.CharField(max_length=50)
     companyCEO = models.CharField(max_length=50)
@@ -55,6 +55,7 @@ class Report(models.Model):
     currentProjects = models.CharField(max_length=200)
     accessType = models.CharField(max_length=7, choices=(("private", "private"), ("public", "public")), default="public")
     files = models.ManyToManyField(ReportFile, blank=True)
+    stars = models.ManyToManyField(User, blank=True, related_name="starred")
 
     def __str__(self):
         return self.reportName
@@ -99,7 +100,7 @@ class ReportForm(ModelForm):
         model = Report
         # fields = ['reportName', 'companyUser', 'timeStamp', 'companyName','companyPhone','companyLocation','companyCountry','sector', 'industry','accessType']
         fields = '__all__'
-        exclude = ["companyUser", "timeStamp"]
+        exclude = ["companyUser", "timeStamp","stars"]
         request = None
         files = forms.ModelMultipleChoiceField(queryset=None)
 

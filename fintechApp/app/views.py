@@ -16,6 +16,7 @@ import json
 import operator
 from django.db.models import Q
 from datetime import datetime
+from django.shortcuts import redirect
 
 
 # Create your views here.
@@ -295,9 +296,19 @@ def add_report(request):
     return render(request, 'add_report.html', {'modelForm': modelForm})
 
 
+def starReport(request, reportId):
+    report = Report.objects.filter(id = reportId).first()
+    if request.user in report.stars.all():
+        report.stars.remove(request.user)
+    else:
+        report.stars.add(request.user)
+
+    return redirect("reports")
+
+
 @permission_required('app.add_report')
 def add_reportFile(request):
-    print(request.FILES)
+    # print(request.FILES)
     if request.method == "POST":
         modelForm = ReportFileForm(request.POST, request.FILES)
         if modelForm.is_valid():

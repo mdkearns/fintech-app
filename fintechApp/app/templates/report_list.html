@@ -43,6 +43,20 @@
         {% for report in user_reports %}
         <div id = "reportCards" class="card text-center">
             <div class="card-block">
+              <p style="position:absolute">
+                  <a href="{% url 'star_report' report.id %}">
+                    {% if user in report.stars.all %}
+                    <span id="star" class="glyphicon glyphicon-star" style="float:left;">
+                    {% else %}
+                    <span id="star" class="glyphicon glyphicon-star-empty" style="float:left;">
+                    {% endif %}
+                  </a>
+                  &nbsp;&nbsp;
+                  <span class="badge badge-notify">
+                      {{ report.stars.count }}
+                  </span>
+                  
+                </p>
               <h4 class="card-title">{{ report.reportName }}</h4>
               <p class="card-text">Created by: <b>{{ report.companyUser }}</b> on {{ report.timeStamp }} 
                 &nbsp; <span class="glyphicon glyphicon-file" style="float:right;">

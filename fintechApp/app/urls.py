@@ -13,6 +13,7 @@ urlpatterns = [
 	url(r'^get_report_files', views.get_report_files, name='get_report_files'),
     url(r'^create_report/', views.add_report, name='create_report'),
     url(r'^add_reportFile/', views.add_reportFile, name='add_reportFile'),
+    url(r'^star_report/(?P<reportId>[\w ]+)$', views.starReport, name='star_report'),
     url(r'^report/(?P<pk>\d+)$', views.reportDetail.as_view(), name='report_detail'),
     url(r'^report/(?P<pk>\d+)/edit_report$', views.sm_edit_report, name='edit_report'),
     url(r'^groups/$', views.groups.as_view(), name='groups'),

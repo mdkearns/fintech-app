@@ -44,3 +44,9 @@
     margin-right: -13px;
     min-width: 6px;
  }
+
+
+#star{
+    color: rgb(255, 187, 0);
+    font-size: 18px;
+}
