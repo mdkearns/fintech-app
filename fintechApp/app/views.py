@@ -17,6 +17,7 @@ import operator
 from django.db.models import Q
 from datetime import datetime
 from django.shortcuts import redirect
+from django.utils.encoding import smart_bytes, smart_text
 
 
 # Create your views here.
@@ -251,7 +252,7 @@ class reportSearchListView(generic.ListView):
         if myReports:
             result = result.filter(companyUser = self.request.user)
         if favorited:
-            result = result.filter(stars=self.request.user) 
+            result = result.filter(stars=self.request.user)
 
         return result
 
@@ -468,7 +469,9 @@ def send_message(request):
             receiver = form.cleaned_data.get('receiver')
 
             if encrypted is True:
-                new_message = Message.objects.create(message_subject=message_subject, message_text='This message is encrypted. Decrypt to view.', encrypted=encrypted, receiver=receiver, sender=sender, encrypted_message_text = receiver.key.get_pub_key().encrypt(message_text.encode('utf-8'), 32))
+                bytes_text = message_text.encode("utf-8").strip()
+                encrypted_bytes_text = receiver.key.encrypt(bytes_text)
+                new_message = Message.objects.create(message_subject=message_subject, message_text='This message is encrypted. Decrypt to view.', encrypted=encrypted, receiver=receiver, sender=sender, encrypted_message_text = encrypted_bytes_text)
 
             else:
                 new_message = Message.objects.create(message_subject=message_subject, message_text=message_text, encrypted=encrypted, receiver=receiver, sender=sender)

@@ -10,8 +10,8 @@ from django import forms
 from django.core.files.storage import FileSystemStorage
 import json
 from uuid import uuid4
-from Crypto.PublicKey import RSA
-from Crypto import Random
+import nacl.utils
+from nacl.public import PrivateKey, SealedBox
 
 class UserMadeGroup(models.Model):
     """
@@ -93,7 +93,7 @@ class Message(models.Model):
     encrypted = models.BooleanField(default = False)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'sender')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'receiver')
-    encrypted_message_text = models.TextField(default="")
+    encrypted_message_text = models.BinaryField()
 
     def get_absolute_url(self):
         return reverse('message_detail', args=[str(self.id)])
@@ -155,13 +155,21 @@ def save_user_profile(sender, instance, **kwargs):
 
 class Key(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    key = RSA.generate(1024, Random.new().read)
+    key = PrivateKey.generate()
 
     def get_pub_key(self):
-        return self.key.publickey()
+        return self.key.public_key
 
     def get_priv_key(self):
         return self.key
+
+    def encrypt(self, message):
+        sealed_box = SealedBox(self.get_pub_key())
+        return sealed_box.encrypt(message)
+
+    def decrypt(self, encrypted_message):
+        unseal_box = SealedBox(get_priv_key())
+        return unseal_box.decrypt(encrypted_message)
 
 @receiver(post_save, sender=User)
 def create_user_key(sender, instance, created, **kwargs):
