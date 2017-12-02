@@ -479,35 +479,16 @@ def send_message(request):
         form = MessageForm()
     return render(request, 'send_message.html', {'form': form})
 
-def delete_message(request):
-    if request.method == "POST":
-        form = DeleteMessageForm(request.POST, request=request)
-        if form.is_valid():
-            messages = form.cleaned_data.get('messages')
-            current_user = request.user
-            for message in messages:
-                id=message.unique_id
-                Message.objects.filter(unique_id=id).delete()
-            # redirect, or however you want to get to the main view
-            return HttpResponseRedirect(reverse('messages'))
-    else:
-        form = DeleteMessageForm(request=request)
-    return render(request, 'delete_message.html', {'form': form})
+def delete_message(request, messageId):
+    Message.objects.filter(id=messageId).delete()
 
-def decrypt_message(request):
-    if request.method == "POST":
-        form = DecryptMessageForm(request.POST, request=request)
-        if form.is_valid():
-            messages = form.cleaned_data.get('messages')
-            for message in messages:
-                id=message.unique_id
-                Message.objects.filter(unique_id=id).first().decrypt()
-            # redirect, or however you want to get to the main view
-            return HttpResponseRedirect(reverse('messages'))
-    else:
-        form = DecryptMessageForm(request=request)
+    return HttpResponseRedirect(reverse('messages'))
 
-    return render(request, 'decrypt_message.html', {'form': form})
+def decrypt_message(request, messageId):
+    url = request.META.get('HTTP_REFERER')
+    Message.objects.filter(id=messageId).first().decrypt()
+
+    return HttpResponseRedirect(url)
 
 def delete_report(request):
     if request.method == "POST":

@@ -7,8 +7,18 @@
         <p>From: {{message.sender.username}}</p>
         <br><br>
         <p>{{message.message_text}}</p>
+        {% if not message.should_display_unencrypted_message_text %}
         <br><br>
-        <a href="{% url 'messages'%}?next={{request.path}}">Return to Messages</a>
+        <a href="{% url 'decrypt_message' message.id %}" class="btn btn-warning">
+          Decrypt Message
+        </a>
+        {% endif %}
+        <br><br>
+        <a href="{% url 'delete_message' message.id %}" class="btn btn-danger">
+          Delete this Message
+        </a>
+        <br><br>
+        <a href="{% url 'messages'%}">Return to Messages</a>
         <div style="margin-left:20px;margin-top:20px">
         </div>
     {% else %}

@@ -104,6 +104,7 @@ class Message(models.Model):
         self.message_text = self.receiver.key.decrypt(self.encrypted_message_text)
         self.save()
 
+
 class ReportForm(ModelForm):
     class Meta:
         model = Report
