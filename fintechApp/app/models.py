@@ -10,6 +10,8 @@ from django import forms
 from django.core.files.storage import FileSystemStorage
 import json
 from uuid import uuid4
+from Crypto.PublicKey import RSA
+from Crypto import Random
 
 class UserMadeGroup(models.Model):
     """
@@ -59,7 +61,7 @@ class Report(models.Model):
 
     def __str__(self):
         return self.reportName
-		
+
     def get_files(self):
         return self.files
 
@@ -91,6 +93,7 @@ class Message(models.Model):
     encrypted = models.BooleanField(default = False)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'sender')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'receiver')
+    encrypted_message_text = models.TextField(default="")
 
     def get_absolute_url(self):
         return reverse('message_detail', args=[str(self.id)])
@@ -149,3 +152,22 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+class Key(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    key = RSA.generate(1024, Random.new().read)
+
+    def get_pub_key(self):
+        return self.key.publickey()
+
+    def get_priv_key(self):
+        return self.key
+
+@receiver(post_save, sender=User)
+def create_user_key(sender, instance, created, **kwargs):
+    if created:
+        Key.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_key(sender, instance, **kwargs):
+    instance.key.save()
