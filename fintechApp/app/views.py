@@ -340,7 +340,27 @@ def addFileToReport(request,reportId):
             return HttpResponseRedirect(reverse('reports'))
     else:
         form = addFileToReportForm(request=request, reportId = reportId)
-    return render(request, 'add_file_to_report.html', {'form': form})
+    return render(request, 'add_file_to_report.html', {'form': form, 'reportId': reportId})
+
+
+def addNewFileToReport(request,reportId):
+    if request.method == "POST":
+        modelForm = ReportFileForm(request.POST, request.FILES)
+        if modelForm.is_valid():
+            obj = modelForm.save(commit=False)
+            obj.companyUser = request.user
+            obj.save()
+            newFile = ReportFile.objects.filter(id = obj.id).first()
+            report = Report.objects.filter(id = reportId).first()
+
+            report.files.add(newFile)
+
+            modelForm = ReportFileForm()
+    else:
+        modelForm = ReportFileForm()
+
+    return render(request, 'add_new_file_to_report.html', {'reportId': reportId, 'modelForm': modelForm})
+
 
 
 class reportDetail(generic.DetailView):
