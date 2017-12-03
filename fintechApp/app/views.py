@@ -27,7 +27,7 @@ def index(request):
     """
     View Function for home page of site
     """
-    starred = Report.objects.filter(stars=request.user) 
+    starred = Report.objects.filter(stars=request.user)
 
     return render(
         request,
@@ -483,11 +483,12 @@ def send_message(request):
             encrypted = form.cleaned_data.get('encrypted')
             sender = request.user
             receiver = form.cleaned_data.get('receiver')
+            time_stamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
             if encrypted is True:
                 bytes_text = message_text.encode("utf-8").strip()
                 encrypted_bytes_text = receiver.key.encrypt(bytes_text)
-                new_message = Message.objects.create(message_subject=message_subject, message_text='This message is encrypted. Decrypt to view.', encrypted=encrypted, receiver=receiver, sender=sender, encrypted_message_text = encrypted_bytes_text)
+                new_message = Message.objects.create(message_subject=message_subject, message_text='This message is encrypted. Decrypt to view.', encrypted=encrypted, receiver=receiver, sender=sender, encrypted_message_text = encrypted_bytes_text, time_stamp = time_stamp)
 
             else:
                 new_message = Message.objects.create(message_subject=message_subject, message_text=message_text, encrypted=encrypted, receiver=receiver, sender=sender)
@@ -498,20 +499,16 @@ def send_message(request):
         form = MessageForm()
     return render(request, 'send_message.html', {'form': form})
 
-def delete_message(request):
-    if request.method == "POST":
-        form = DeleteMessageForm(request.POST, request=request)
-        if form.is_valid():
-            messages = form.cleaned_data.get('messages')
-            current_user = request.user
-            for message in messages:
-                id=message.unique_id
-                Message.objects.filter(unique_id=id).delete()
-            # redirect, or however you want to get to the main view
-            return HttpResponseRedirect(reverse('messages'))
-    else:
-        form = DeleteMessageForm(request=request)
-    return render(request, 'delete_message.html', {'form': form})
+def delete_message(request, messageId):
+    Message.objects.filter(id=messageId).delete()
+
+    return HttpResponseRedirect(reverse('messages'))
+
+def decrypt_message(request, messageId):
+    url = request.META.get('HTTP_REFERER')
+    Message.objects.filter(id=messageId).first().decrypt()
+
+    return HttpResponseRedirect(url)
 
 def delete_report(request):
     if request.method == "POST":

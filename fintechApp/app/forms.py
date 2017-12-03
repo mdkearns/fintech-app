@@ -43,6 +43,18 @@ class ChooseGroupToAddUsersForm(forms.Form):
         self.fields['usermadegroup'].queryset=UserMadeGroup.objects.filter(members=self.request.user)
         self.fields['usermadegroup'].label = 'Which group would you like to add users to'
 
+class DecryptMessageForm(forms.Form):
+    request = None
+    messages = forms.ModelMultipleChoiceField(queryset=None)
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request")
+        super(DecryptMessageForm, self).__init__(*args, **kwargs)
+        self.fields['messages'].queryset=Message.objects.filter(receiver=self.request.user, encrypted=True, should_display_unencrypted_message_text = False)
+        self.fields['messages'].label = "Choose the message(s) you would like to decrypt"
+        self.fields['messages'].label_from_instance = lambda obj: "%s" % obj.message_subject
+
+
 class AddUserToUserMadeGroupForm(forms.Form):
     request = None
     users = forms.ModelMultipleChoiceField(queryset=None)
