@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Report, UserMadeGroup, Message
+from .models import Report, ReportFile, UserMadeGroup, Message
 import json
 from collections import namedtuple
 from types import SimpleNamespace as Namespace
@@ -75,3 +75,24 @@ class DeleteMessageForm(forms.Form):
         self.fields['messages'].queryset=Message.objects.filter(receiver=self.request.user)
         self.fields['messages'].label = 'Your Messages'
         self.fields['messages'].label_from_instance = lambda obj: "%s" % obj.message_subject
+
+
+class addFileToReportForm(forms.Form):
+    request = None
+    newFiles = forms.ModelMultipleChoiceField(queryset=None)
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request")
+        reportId = kwargs.pop("reportId")
+        super(addFileToReportForm, self).__init__(*args, **kwargs)
+        newFiles = []
+        report = Report.objects.filter(id = reportId).first()
+        allUsableFiles = ReportFile.objects.filter(companyUser = self.request.user )
+
+        for reportFile in allUsableFiles:
+            if reportFile not in report.files.all():
+                newFiles.append(reportFile)
+
+        self.fields['newFiles'].queryset = allUsableFiles.filter(name__in=newFiles)
+        self.fields['newFiles'].label = ""
+        # self.fields['newFiles'].label = 'Select which of your files to add to this report.'

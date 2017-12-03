@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h2>Add files to report</h2>
+    {% if user.is_authenticated %}  
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+    <br><br><br>
+    <a href="{% url 'reports'%}">Back to reports</a>
+    {% else %}
+    <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
+    {% endif %}
+
+{% endblock %}
