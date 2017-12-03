@@ -6,7 +6,7 @@
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit">Send message</button>
+      <button type="submit" class = "btn btn-primary">Send message</button>
     </form>
     <br><br><br><br>
     <a href="{% url 'messages'%}?next={{request.path}}">Return to Messages</a>

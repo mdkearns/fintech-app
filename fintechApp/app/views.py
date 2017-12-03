@@ -464,11 +464,12 @@ def send_message(request):
             encrypted = form.cleaned_data.get('encrypted')
             sender = request.user
             receiver = form.cleaned_data.get('receiver')
+            time_stamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
             if encrypted is True:
                 bytes_text = message_text.encode("utf-8").strip()
                 encrypted_bytes_text = receiver.key.encrypt(bytes_text)
-                new_message = Message.objects.create(message_subject=message_subject, message_text='This message is encrypted. Decrypt to view.', encrypted=encrypted, receiver=receiver, sender=sender, encrypted_message_text = encrypted_bytes_text)
+                new_message = Message.objects.create(message_subject=message_subject, message_text='This message is encrypted. Decrypt to view.', encrypted=encrypted, receiver=receiver, sender=sender, encrypted_message_text = encrypted_bytes_text, time_stamp = time_stamp)
 
             else:
                 new_message = Message.objects.create(message_subject=message_subject, message_text=message_text, encrypted=encrypted, receiver=receiver, sender=sender)

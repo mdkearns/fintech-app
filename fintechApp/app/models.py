@@ -12,6 +12,7 @@ import json
 from uuid import uuid4
 import nacl.utils
 from nacl.public import PrivateKey, SealedBox
+from datetime import datetime
 
 class UserMadeGroup(models.Model):
     """
@@ -87,7 +88,7 @@ class Report(models.Model):
         )
 
 class Message(models.Model):
-    unique_id = models.UUIDField(default=uuid4, editable=False, unique=True)
+    time_stamp = models.DateTimeField(auto_now_add=True)
     message_subject = models.CharField(max_length = 200, blank = False)
     message_text = models.TextField(blank = False)
     encrypted = models.BooleanField(default = False)
@@ -96,13 +97,16 @@ class Message(models.Model):
     encrypted_message_text = models.BinaryField()
     should_display_unencrypted_message_text = models.BooleanField(default = False)
 
+    class Meta:
+       ordering = ['-time_stamp']
+
     def get_absolute_url(self):
         return reverse('message_detail', args=[str(self.id)])
 
     def decrypt(self):
         self.should_display_unencrypted_message_text = True
-        self.message_text = self.receiver.key.decrypt(self.encrypted_message_text)
         self.save()
+        return self.receiver.key.decrypt(self.encrypted_message_text)
 
 
 class ReportForm(ModelForm):

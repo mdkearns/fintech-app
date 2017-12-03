@@ -6,7 +6,11 @@
         <h3>Subject: {{ message.message_subject }}</h3>
         <p>From: {{message.sender.username}}</p>
         <br><br>
+        {% if message.should_display_unencrypted_message_text %}
+        <p>{{message.decrypt}}</p>
+        {% else %}
         <p>{{message.message_text}}</p>
+        {% endif %}
         {% if not message.should_display_unencrypted_message_text %}
         <br><br>
         <a href="{% url 'decrypt_message' message.id %}" class="btn btn-warning">
