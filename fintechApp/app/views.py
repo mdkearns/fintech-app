@@ -255,18 +255,15 @@ class reportSearchListView(generic.ListView):
 
 class groups(generic.ListView):
     model = UserMadeGroup
-    paginate_by = 10
+    paginate_by = 4
     context_object_name = 'groups'
     template_name = 'group_list.html'
     def get_queryset(self):
         return UserMadeGroup.objects.filter(members = self.request.user)
 
-    def get_queryset(self):
-        return UserMadeGroup.objects.filter(members=self.request.user)
-
 class messages(generic.ListView):
     model = Message
-    paginate_by = 10
+    paginate_by = 4
     context_object_name = 'messages'
     template_name = 'view_messages.html'
 
@@ -464,20 +461,10 @@ def add_group(request):
 
     return render(request, 'add_group.html', {'form': form})
 
-def remove_from_groups(request):
-    if request.method == "POST":
-        form = RemoveUserMadeGroupForm(request.POST, request=request)
-        if form.is_valid():
-            groups = form.cleaned_data.get('usermadegroups')
-            current_user = request.user
-            for group in groups:
-                group.members.remove(current_user)
-            # redirect, or however you want to get to the main view
-            return HttpResponseRedirect(reverse('groups'))
-    else:
-        form = RemoveUserMadeGroupForm(request=request)
-
-    return render(request, 'remove_user_from_groups.html', {'form': form})
+def remove_from_group(request, groupId):
+    current_user = request.user
+    UserMadeGroup.objects.filter(id=groupId).first().members.remove(current_user)
+    return HttpResponseRedirect(reverse('groups'))
 
 def add_users_to_group(request, pk):
     if request.method == "POST":
