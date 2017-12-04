@@ -29,7 +29,6 @@ def index(request):
     """
     if request.user.is_authenticated:
         starred = Report.objects.filter(stars=request.user)
-    starred=[]
 
     return render(
         request,
