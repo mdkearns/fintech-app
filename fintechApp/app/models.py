@@ -168,15 +168,26 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
+
+class CustomKey(object):
+    def __init__(self, private_key):
+        self.priv_key=private_key
+        
 class Key(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    key = PrivateKey.generate()
+    key = CustomKey(PrivateKey.generate())
+
+    def gen_key(self):
+        print("NEW KEY GENERATED................................................")
+        self.key = PrivateKey.generate()
+        self.user.key.save()
+        print(self.key)
 
     def get_pub_key(self):
-        return self.key.public_key
+        return self.key.priv_key.public_key
 
     def get_priv_key(self):
-        return self.key
+        return self.key.priv_key
 
     def encrypt(self, message):
         sealed_box = SealedBox(self.get_pub_key())
@@ -186,10 +197,15 @@ class Key(models.Model):
         unseal_box = SealedBox(self.get_priv_key())
         return unseal_box.decrypt(encrypted_message)
 
+
+
+
 @receiver(post_save, sender=User)
 def create_user_key(sender, instance, created, **kwargs):
     if created:
         Key.objects.create(user=instance)
+        Key.objects.filter(user=instance).first().gen_key()
+
 
 @receiver(post_save, sender=User)
 def save_user_key(sender, instance, **kwargs):

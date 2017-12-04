@@ -27,7 +27,9 @@ def index(request):
     """
     View Function for home page of site
     """
-    starred = Report.objects.filter(stars=request.user)
+    if request.user.is_authenticated:
+        starred = Report.objects.filter(stars=request.user)
+    starred=[]
 
     return render(
         request,
