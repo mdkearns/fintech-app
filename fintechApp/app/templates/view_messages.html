@@ -1,7 +1,7 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<h1>Your Messages</h1>
+<h1 id="message_list_title">Your Messages</h1>
     {% if user.is_authenticated %}
         {% if messages %}
         <ul id="message_list">
@@ -19,7 +19,7 @@
               {% else %}
               <p class="card-text">Sent from: <b>{{ message.sender }}</b> on {{ message.time_stamp }}</p>
               {% endif %}
-              
+
               <a href="{{ message.get_absolute_url }}" class="btn btn-primary">View Message</a>
             </div>
           </div>

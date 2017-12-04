@@ -87,6 +87,10 @@
     -webkit-transform: translate(-50%, 0);
 }
 
+#message_list_title {
+    padding-left:10%;
+}
+
 #message_cards {
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     padding: 10px;
@@ -94,5 +98,19 @@
 }
 
 #message_list{
+    position: absolute;
+}
+
+#group_list_title {
+    padding-left:10%;
+}
+
+#group_cards {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    padding: 10px;
+    margin: 15px;
+}
+
+#group_list{
     position: absolute;
 }

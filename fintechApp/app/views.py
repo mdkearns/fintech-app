@@ -591,7 +591,7 @@ def sm_edit_report(request, pk):
 
 def add_report_to_group(request):
     if request.method == "POST":
-        form = AddReportToGroupForm(request.POST, request=request)
+        form = AddReportToGroupForm(request.POST)
         if form.is_valid():
             grp = form.cleaned_data.get('usermadegroup')
             group = UserMadeGroup.objects.filter(group_name=grp).first()
@@ -601,5 +601,5 @@ def add_report_to_group(request):
                 group.reports.add(report)
             return HttpResponseRedirect(reverse('groups'))
     else:
-        form = AddReportToGroupForm(request=request)
+        form = AddReportToGroupForm()
     return render(request, 'add_report_to_group.html', {'form': form})
