@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^group/(?P<pk>\d+)/add_users_to_group', views.add_users_to_group, name='add_users_to_group'),
     url(r'^groups/remove_from_groups', views.remove_from_groups, name='remove_from_groups'),
     url(r'^groups/create_group', views.add_group, name='create_group'),
+    url(r'^groups/add_report_to_group', views.add_report_to_group, name='add_report_to_group'),
     url(r'^sm/add_sm/', views.add_sm, name='add_sm'),
     url(r'^sm/groups', views.sm_add_to_group, name='sm_add_to_group'),
     url(r'^sm/delete_report/', views.delete_report, name='sm_delete_report'),

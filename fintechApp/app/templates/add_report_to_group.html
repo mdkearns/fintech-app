@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>Add Report to Group</h2>
+  {% if user.is_authenticated %}
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Add Report to Group</button>
+    </form>
+    <br></br>
+    <a href="{% url 'groups'%}?next={{request.path}}">Return to Groups</a>
+  {% else %}
+    <p>Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.</p>
+  {% endif %}
+
+{% endblock %}

@@ -10,7 +10,38 @@
           {{member.get_username}}
         </li>
         {% endfor %}
-        <br><br><br><br>
+        <br><br>
+        {% for report in group.reports.all %}
+        <div id = "reportCards" class="card text-center">
+            <div class="card-block">
+              <p style="position:absolute">
+                  <a href="{% url 'star_report' report.id 'list' %}">
+                    {% if user in report.stars.all %}
+                    <span id="star" class="glyphicon glyphicon-star" style="float:left;">
+                    {% else %}
+                    <span id="star" class="glyphicon glyphicon-star-empty" style="float:left;">
+                    {% endif %}
+                  </a>
+                  &nbsp;&nbsp;
+                  <span class="badge badge-notify">
+                      {{ report.stars.count }}
+                  </span>
+
+                </p>
+              <h4 class="card-title">{{ report.reportName }}</h4>
+              <p class="card-text">Created by: <b>{{ report.companyUser }}</b> on {{ report.timeStamp }}
+                &nbsp; <span class="glyphicon glyphicon-file" style="float:right;">
+                        <span class="badge badge-notify">{{ report.files.count }}</span>
+                </span>
+              </p>
+              <a href="{{ report.get_absolute_url }}" class="btn btn-primary">
+                  <span class="glyphicon glyphicon-th-list"> </span>
+                  &nbsp; Detail View
+                </a>
+            </div>
+          </div>
+        {% endfor %}
+        <br><br>
         <a href="{% url 'groups'%}?next={{request.path}}">Return to Groups</a>
         <div style="margin-left:20px;margin-top:20px">
         </div>

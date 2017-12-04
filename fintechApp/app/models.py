@@ -14,25 +14,6 @@ import nacl.utils
 from nacl.public import PrivateKey, SealedBox
 from datetime import datetime
 
-class UserMadeGroup(models.Model):
-    """
-    Model representing a group of users. Can be created by any user.
-    """
-    group_name = models.CharField(max_length=50, unique=True)
-    members = models.ManyToManyField(User)
-
-    def __str__(self):
-        return self.group_name
-
-    def get_absolute_url(self):
-        return reverse('group_detail', args=[str(self.id)])
-
-    def add_user(group, user):
-        UserMadeGroup.objects.get(group_name=group).members.add(User.objects.get(username=user))
-
-    def remove_user(group, user):
-        UserMadeGroup.objects.get(group_name=group).members.remove(User.objects.get(username=user))
-
 class ReportFile(models.Model):
     companyUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=50, default="NO_NAME")
@@ -86,6 +67,26 @@ class Report(models.Model):
             ('can_view_reports', "Can view reports"),
             ('can_change_reports', "Can change reports")
         )
+
+class UserMadeGroup(models.Model):
+    """
+    Model representing a group of users. Can be created by any user.
+    """
+    group_name = models.CharField(max_length=50, unique=True)
+    members = models.ManyToManyField(User)
+    reports = models.ManyToManyField(Report)
+
+    def __str__(self):
+        return self.group_name
+
+    def get_absolute_url(self):
+        return reverse('group_detail', args=[str(self.id)])
+
+    def add_user(group, user):
+        UserMadeGroup.objects.get(group_name=group).members.add(User.objects.get(username=user))
+
+    def remove_user(group, user):
+        UserMadeGroup.objects.get(group_name=group).members.remove(User.objects.get(username=user))
 
 class Message(models.Model):
     time_stamp = models.DateTimeField(auto_now_add=True)
@@ -154,6 +155,9 @@ class Profile(models.Model):
 
 class DeleteReportForm(forms.Form):
     report = forms.ModelChoiceField(queryset=Report.objects.all(), empty_label=None)
+
+class AddReportToGroupForm(forms.Form):
+    group = forms.ModelChoiceField(queryset = UserMadeGroup.objects.all(), empty_label=None)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

@@ -18,7 +18,7 @@ from django.db.models import Q
 from datetime import datetime
 from django.shortcuts import redirect
 from django.utils.encoding import smart_bytes, smart_text
-
+from itertools import chain
 
 # Create your views here.
 from .models import *
@@ -176,7 +176,7 @@ class reports(generic.ListView):
         result = Report.objects.all()
 
         if(self.request.user.groups.filter(name='Site Manager').exists() == False):
-            result = result.filter(Q(accessType = "public") | Q(companyUser = self.request.user))
+            result = result.filter(Q(accessType = "public") | Q(companyUser = self.request.user)|Q(usermadegroup__members=self.request.user)).distinct()
 
         return result
 
@@ -190,7 +190,7 @@ class reportSearchListView(generic.ListView):
         result = Report.objects.all()
 
         if(self.request.user.groups.filter(name='Site Manager').exists() == False):
-            result = result.filter(Q(accessType = "public") | Q(companyUser = self.request.user))
+            result = result.filter(Q(accessType = "public") | Q(companyUser = self.request.user) | Q(usermadegroup__members=self.request.user)).distinct()
 
         reportName = self.request.GET.get('reportName')
         reportNameExact = self.request.GET.get('reportNameExact')
@@ -342,7 +342,7 @@ def addFileToReport(request,reportId):
 
             for f in files:
                 report.files.add(f)
-            
+
             return HttpResponseRedirect(reverse('reports'))
     else:
         form = addFileToReportForm(request=request, reportId = reportId)
@@ -386,7 +386,8 @@ class reportDetail(generic.DetailView):
         queryset = super(reportDetail, self).get_queryset()
 
         if(self.request.user.groups.filter(name='Site Manager').exists() == False):
-            queryset = queryset.filter(Q(accessType = "public") | Q(companyUser = self.request.user))
+            queryset = queryset.filter(Q(accessType = "public") | Q(companyUser = self.request.user) | Q(usermadegroup__members=self.request.user)).distinct()
+
 
         return queryset
 
@@ -587,3 +588,18 @@ def sm_edit_report(request, pk):
     else:
         form = ReportForm2(instance=rep)
     return render(request, 'edit_report.html', {'form': form})
+
+def add_report_to_group(request):
+    if request.method == "POST":
+        form = AddReportToGroupForm(request.POST, request=request)
+        if form.is_valid():
+            grp = form.cleaned_data.get('usermadegroup')
+            group = UserMadeGroup.objects.filter(group_name=grp).first()
+            rep = form.cleaned_data.get('report')
+            report = Report.objects.filter(reportName=rep).first()
+            if not report in group.reports.all():
+                group.reports.add(report)
+            return HttpResponseRedirect(reverse('groups'))
+    else:
+        form = AddReportToGroupForm(request=request)
+    return render(request, 'add_report_to_group.html', {'form': form})
