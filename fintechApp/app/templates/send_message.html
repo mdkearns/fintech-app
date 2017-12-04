@@ -9,7 +9,7 @@
       <button type="submit" class = "btn btn-primary">Send message</button>
     </form>
     <br><br><br><br>
-    <a href="{% url 'messages'%}?next={{request.path}}">Return to Messages</a>
+    <a href="{% url 'messages'%}" class="btn btn-primary">Return to Messages</a>
     <div style="margin-left:20px;margin-top:20px">
     </div>
   {% else %}

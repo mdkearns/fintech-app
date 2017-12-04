@@ -71,13 +71,15 @@ class DecryptMessageForm(forms.Form):
 
 class AddUserToUserMadeGroupForm(forms.Form):
     request = None
+    groupId = None
     users = forms.ModelMultipleChoiceField(queryset=None)
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request")
+        self.groupId = kwargs.pop("groupId")
         super(AddUserToUserMadeGroupForm, self).__init__(*args, **kwargs)
-        group_name = self.request.session.get('group_name')
-        group = UserMadeGroup.objects.filter(group_name = group_name).first()
+
+        group = UserMadeGroup.objects.filter(id = self.groupId).first()
         users = []
         for user in User.objects.all():
             if user not in group.members.all():
