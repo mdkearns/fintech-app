@@ -311,8 +311,14 @@ def starReport(request, reportId, view):
 
 @permission_required('app.add_report')
 def add_reportFile(request):
-    # print(request.FILES)
     if request.method == "POST":
+        if(request.POST['encrypted']):
+            request.FILES['file'].open('w+')
+            text = request.FILES['file'].read()
+            encrypted = request.user.key.encrypt(text)
+            request.FILES['file'].seek(0)
+            request.FILES['file'].write(encrypted)
+
         modelForm = ReportFileForm(request.POST, request.FILES)
         if modelForm.is_valid():
             obj = modelForm.save(commit=False)
@@ -347,6 +353,14 @@ def addNewFileToReport(request,reportId):
     if request.method == "POST":
         modelForm = ReportFileForm(request.POST, request.FILES)
         if modelForm.is_valid():
+            if(request.POST['encrypted']):
+                request.FILES['file'].open('w+')
+                text = request.FILES['file'].read()
+                encrypted = request.user.key.encrypt(text)
+                request.FILES['file'].seek(0)
+                request.FILES['file'].write(encrypted)
+
+
             obj = modelForm.save(commit=False)
             obj.companyUser = request.user
             obj.save()

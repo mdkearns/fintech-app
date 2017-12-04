@@ -6,8 +6,6 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <!-- <a href="{% url 'add_reportFile'%}">Upload new ReportFile</a>
-        <br><br> -->
         <button class="btn btn-primary" type="submit">Submit</button>
     </form>
     <br><br><br>
