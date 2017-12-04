@@ -255,18 +255,15 @@ class reportSearchListView(generic.ListView):
 
 class groups(generic.ListView):
     model = UserMadeGroup
-    paginate_by = 10
+    paginate_by = 4
     context_object_name = 'groups'
     template_name = 'group_list.html'
     def get_queryset(self):
         return UserMadeGroup.objects.filter(members = self.request.user)
 
-    def get_queryset(self):
-        return UserMadeGroup.objects.filter(members=self.request.user)
-
 class messages(generic.ListView):
     model = Message
-    paginate_by = 10
+    paginate_by = 4
     context_object_name = 'messages'
     template_name = 'view_messages.html'
 
@@ -464,50 +461,27 @@ def add_group(request):
 
     return render(request, 'add_group.html', {'form': form})
 
-def remove_from_groups(request):
-    if request.method == "POST":
-        form = RemoveUserMadeGroupForm(request.POST, request=request)
-        if form.is_valid():
-            groups = form.cleaned_data.get('usermadegroups')
-            current_user = request.user
-            for group in groups:
-                group.members.remove(current_user)
-            # redirect, or however you want to get to the main view
-            return HttpResponseRedirect(reverse('groups'))
-    else:
-        form = RemoveUserMadeGroupForm(request=request)
+def remove_from_group(request, groupId):
+    current_user = request.user
+    UserMadeGroup.objects.filter(id=groupId).first().members.remove(current_user)
+    return HttpResponseRedirect(reverse('groups'))
 
-    return render(request, 'remove_user_from_groups.html', {'form': form})
-
-def add_users_to_group(request, pk):
+def add_users_to_group(request, groupId):
+    groupId = groupId
     if request.method == "POST":
-        form = AddUserToUserMadeGroupForm(request.POST, request=request)
+        form = AddUserToUserMadeGroupForm(request.POST, request=request, groupId=groupId)
 
         if form.is_valid():
-            group = UserMadeGroup.objects.filter(group_name = request.session['group_name']).first()
+            group = UserMadeGroup.objects.filter(id=groupId).first()
             users = form.cleaned_data.get('users')
             current_user = request.user
             for user in users:
                 group.members.add(user)
             # redirect, or however you want to get to the main view
-            return HttpResponseRedirect(reverse('groups'))
+            return HttpResponseRedirect(group.get_absolute_url())
     else:
-        form = AddUserToUserMadeGroupForm(request=request)
+        form = AddUserToUserMadeGroupForm(request=request, groupId=groupId)
     return render(request, 'add_users_to_group.html', {'form': form})
-
-def choose_group_to_add_users(request):
-    if request.method == "POST":
-        form = ChooseGroupToAddUsersForm(request.POST, request=request)
-        if form.is_valid():
-            group = form.cleaned_data.get('usermadegroup')
-            group_name = form.cleaned_data.get('usermadegroup').group_name
-            request.session['group_name'] = group_name
-            # redirect, or however you want to get to the main view
-            return HttpResponseRedirect(group.get_absolute_url() + '/add_users_to_group')
-    else:
-        form = ChooseGroupToAddUsersForm(request=request)
-
-    return render(request, 'choose_group_to_add_users.html', {'form': form})
 
 def send_message(request):
     if request.method == "POST":

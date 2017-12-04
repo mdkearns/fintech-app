@@ -14,15 +14,18 @@
         {% if not message.should_display_unencrypted_message_text %}
         <br><br>
         <a href="{% url 'decrypt_message' message.id %}" class="btn btn-warning">
-          Decrypt Message
+          <span class="glyphicon glyphicon-lock"> </span>
+          &nbsp; Decrypt
         </a>
         {% endif %}
         <br><br>
         <a href="{% url 'delete_message' message.id %}" class="btn btn-danger">
-          Delete this Message
+          <span class="glyphicon glyphicon-remove"> </span>
+          &nbsp;
+          Delete
         </a>
         <br><br>
-        <a href="{% url 'messages'%}">Return to Messages</a>
+        <a href="{% url 'messages'%}" class="btn btn-primary">Return to Messages</a>
         <div style="margin-left:20px;margin-top:20px">
         </div>
     {% else %}

@@ -6,10 +6,10 @@
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit">Create new group</button>
+      <button type="submit" class="btn btn-success">Create new group</button>
     </form>
     <br><br><br><br>
-    <a href="{% url 'groups'%}?next={{request.path}}">Return to Groups</a>
+    <a href="{% url 'groups'%}" class="btn btn-primary">Return to Groups</a>
     <div style="margin-left:20px;margin-top:20px">
     </div>
   {% else %}

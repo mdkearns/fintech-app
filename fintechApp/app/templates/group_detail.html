@@ -42,7 +42,17 @@
           </div>
         {% endfor %}
         <br><br>
-        <a href="{% url 'groups'%}?next={{request.path}}">Return to Groups</a>
+        <a href="{% url 'add_users_to_group' group.id %}" class="btn btn-success">
+          <span class="glyphicon glyphicon-plus"> </span>
+          &nbsp;
+          Add members
+        </a>
+        <br><br>
+        <a href="{% url 'remove_from_group' group.id %}" class="btn btn-danger">
+          Remove me
+        </a>
+        <br><br>
+        <a href="{% url 'groups'%}" class="btn btn-primary">Return to Groups</a>
         <div style="margin-left:20px;margin-top:20px">
         </div>
     {% else %}
