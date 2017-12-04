@@ -156,9 +156,6 @@ class Profile(models.Model):
 class DeleteReportForm(forms.Form):
     report = forms.ModelChoiceField(queryset=Report.objects.all(), empty_label=None)
 
-class AddReportToGroupForm(forms.Form):
-    group = forms.ModelChoiceField(queryset = UserMadeGroup.objects.all(), empty_label=None)
-
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -172,7 +169,7 @@ def save_user_profile(sender, instance, **kwargs):
 class CustomKey(object):
     def __init__(self, private_key):
         self.priv_key=private_key
-        
+
 class Key(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     key = CustomKey(PrivateKey.generate())
