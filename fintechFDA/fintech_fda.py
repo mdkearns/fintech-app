@@ -1,4 +1,6 @@
 import requests
+import tkinter as tk
+from tkinter.filedialog import askopenfilename
 
 authenticated = False
 
@@ -50,6 +52,13 @@ while True:
 		for report in reports:
 			print("\t" + str(report))
 		selection = input("\nEnter the name of the next report to view (q to quit): ")
+	if selection == "a":
+		#root = tkinter.Tk()
+		#dirname = tkFileDialog.askdirectory(parent=root, initialdir="/", title='Please select a directory')
+		root = tk.Tk()
+		root.withdraw()
+		dirname = askopenfilename()
+		print(dirname)
 	if selection == "d":
 		file_to_download = input("\nEnter the name of the file to download: ")
 		print("\nDownloaded file \"" + file_to_download + "\" for report: " + last_report)
@@ -67,13 +76,13 @@ while True:
 		print(report_text.text)
 		print("Attached Files:\n")
 		print(file_text.text+ "\n")
-		selection = input("Please Enter one of the following:\n\ns : select next report\nd : download files for this report\nq : quit\n\n")
+		selection = input("Please Enter one of the following:\n\ns : select next report\na : add file to report\nd : download files for this report\nq : quit\n\n")
 	else:
 		print("\nYou selected: ", selection)
 		print("This is an invalid command.")
 		selection = input("Please Enter one of the following:\n\ns : select next report\nd : download files for this report\nq : quit\n\n")
 
-print("Goodbye.")
+print("\nGoodbye.")
 
 
 
