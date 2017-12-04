@@ -23,13 +23,19 @@ while not authenticated:
 req = requests.get('http://127.0.0.1:8000/app/get_reports', params=login)
 
 print()
-print("Available reports to view:\n")
-#print(req.text)
 
 reports = req.text.split(',')
 
-for report in reports:
-	print("\t" + str(report))
+if reports[0] == '':
+
+	print("\tThere are no available reports to view.")
+	
+else:
+
+	print("Available reports to view:\n")
+
+	for report in reports:
+		print("\t" + str(report))
 
 selection = input("\nEnter the name of the report to view (q to quit): ")
 
@@ -59,7 +65,7 @@ while True:
 		file_text = requests.get('http://127.0.0.1:8000/app/get_report_files', params=login)
 		print("\nReport Details:\n")
 		print(report_text.text)
-		print("\nAttached Files:\n")
+		print("Attached Files:\n")
 		print(file_text.text+ "\n")
 		selection = input("Please Enter one of the following:\n\ns : select next report\nd : download files for this report\nq : quit\n\n")
 	else:
