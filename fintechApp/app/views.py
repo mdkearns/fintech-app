@@ -311,12 +311,13 @@ def starReport(request, reportId, view):
 @permission_required('app.add_report')
 def add_reportFile(request):
     if request.method == "POST":
-        if(request.POST['encrypted']):
-            request.FILES['file'].open('w+')
-            text = request.FILES['file'].read()
-            encrypted = request.user.key.encrypt(text)
-            request.FILES['file'].seek(0)
-            request.FILES['file'].write(encrypted)
+        if("encrypted" in request.POST.keys()):
+            if(request.POST['encrypted']):
+                request.FILES['file'].open('w+')
+                text = request.FILES['file'].read()
+                encrypted = request.user.key.encrypt(text)
+                request.FILES['file'].seek(0)
+                request.FILES['file'].write(encrypted)
 
         modelForm = ReportFileForm(request.POST, request.FILES)
         if modelForm.is_valid():
@@ -352,12 +353,13 @@ def addNewFileToReport(request,reportId):
     if request.method == "POST":
         modelForm = ReportFileForm(request.POST, request.FILES)
         if modelForm.is_valid():
-            if(request.POST['encrypted']):
-                request.FILES['file'].open('w+')
-                text = request.FILES['file'].read()
-                encrypted = request.user.key.encrypt(text)
-                request.FILES['file'].seek(0)
-                request.FILES['file'].write(encrypted)
+            if("encrypted" in request.POST.keys()):
+                if(request.POST['encrypted']):
+                    request.FILES['file'].open('w+')
+                    text = request.FILES['file'].read()
+                    encrypted = request.user.key.encrypt(text)
+                    request.FILES['file'].seek(0)
+                    request.FILES['file'].write(encrypted)
 
 
             obj = modelForm.save(commit=False)
@@ -565,17 +567,17 @@ def sm_edit_report(request, pk):
         form = ReportForm2(instance=rep)
     return render(request, 'edit_report.html', {'form': form})
 
-def add_report_to_group(request):
+def add_report_to_group(request, groupId):
+    groupId=groupId
     if request.method == "POST":
         form = AddReportToGroupForm(request.POST, request=request)
         if form.is_valid():
-            grp = form.cleaned_data.get('usermadegroup')
-            group = UserMadeGroup.objects.filter(group_name=grp).first()
+            group = UserMadeGroup.objects.filter(id=groupId).first()
             rep = form.cleaned_data.get('report')
             report = Report.objects.filter(reportName=rep).first()
             if not report in group.reports.all():
                 group.reports.add(report)
-            return HttpResponseRedirect(reverse('groups'))
+            return HttpResponseRedirect(group.get_absolute_url())
     else:
         form = AddReportToGroupForm(request=request)
     return render(request, 'add_report_to_group.html', {'form': form})
