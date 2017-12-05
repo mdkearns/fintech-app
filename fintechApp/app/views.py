@@ -160,12 +160,11 @@ def get_report_files(request):
 
 			f = Report.objects.filter(reportName=report_name, companyUser=user)
 			
-			#print(f.get_files())
 			for file in f:
 				f = file.get_files()
 				
 			files = ReportFile.objects.filter(companyUser=user)
-			file_name = ""
+			file_name = "None"
 
 			for file in f:
 				file_name = str(file)
@@ -173,6 +172,29 @@ def get_report_files(request):
 			return HttpResponse(file_name)
 		else:
 			return HttpResponse("Invalid User.")
+			
+def download_file(request):
+	
+	if request.method == "GET":
+
+		usr = request.GET['username']
+		pwd = request.GET['password']
+		report_name = request.GET['report']
+		file_name = request.GET['file']
+
+		user = authenticate(username=usr, password=pwd)
+
+		if user is not None:
+			
+			a = ""
+			
+			try:
+				with open("files/"+file_name) as f:
+					a = f.read()
+			except IOError:
+				a = "Error."
+				
+			return HttpResponse(a)
 
 class reports(generic.ListView):
     model = Report

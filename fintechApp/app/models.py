@@ -19,6 +19,9 @@ class ReportFile(models.Model):
     name = models.CharField(max_length=50, default="NO_NAME")
     file = models.FileField(upload_to='files/')
     encrypted = models.BooleanField(default=False)
+	
+    def get_file(self):
+        return self.file
 
     def __str__(self):
         return self.name

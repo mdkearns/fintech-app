@@ -1,6 +1,6 @@
 import requests
 import tkinter as tk
-from tkinter.filedialog import askopenfilename
+from tkinter.filedialog import askopenfilename, asksaveasfile
 import getpass
 
 authenticated = False
@@ -10,7 +10,6 @@ while not authenticated:
 	print()
 	usr = input("Username: ")
 	pwd = getpass.getpass("Password: ")
-	#pwd = input("Password: ")
 	login = {'username':usr, 'password':pwd}
 	r = requests.get('http://127.0.0.1:8000/app/fda_authenticate', params=login)
 
@@ -61,11 +60,25 @@ while True:
 		file_to_add = open(dirname)
 		print(dirname)
 		login['file'] = file_to_add
-		print(type(login['file']))
+
 	if selection == "d":
 		file_to_download = input("\nEnter the name of the file to download: ")
-		print("\nDownloaded file \"" + file_to_download + "\" for report: " + last_report)
+		login['file'] = file_to_download
+		file_returned = requests.get('http://127.0.0.1:8000/app/download_file/', params=login)
+		file_to_save = file_returned.text
+		
+		if file_to_save != "Error.":
+			root = tk.Tk()
+			root.withdraw()
+			f = asksaveasfile(mode='w', defaultextension=".txt")
+			f.write(file_to_save)
+			f.close()
+			print("\nDownloaded file \"" + file_to_download + "\" for report: " + last_report)
+		else:
+			print("\nInvalid File Name.")
+			
 		selection = input("\nEnter the name of the next report to view (q to quit): ")
+	
 	if selection == "q":
 		break
 		
