@@ -17,11 +17,6 @@ while not authenticated:
 		authenticated = True
 	
 	print("\n" + r.text)
-	
-#---- create reports ----#
-#r = requests.get('http://127.0.0.1:8000/app/make_reports', params=login)
-#print(r.text)
-#------------------------#
 
 req = requests.get('http://127.0.0.1:8000/app/get_reports', params=login)
 
@@ -45,14 +40,15 @@ selection = input("\nEnter the name of the report to view (q to quit): ")
 last_report = None
 
 while True:
-	
-	#validate selected option 
-	
+	 
+	# select next report to view
 	if selection == "s":
 		print("\nAvailable reports to view:\n")
 		for report in reports:
 			print("\t" + str(report))
 		selection = input("\nEnter the name of the next report to view (q to quit): ")
+	
+	# upload file to the report selected
 	if selection == "a":
 		root = tk.Tk()
 		root.withdraw()
@@ -60,7 +56,13 @@ while True:
 		file_to_add = open(dirname)
 		print(dirname)
 		login['file'] = file_to_add
+		
+		print("\nAvailable reports to view:\n")
+		for report in reports:
+			print("\t" + str(report))
+		selection = input("\nEnter the name of the next report to view (q to quit): ")
 
+	# download file for the report selected
 	if selection == "d":
 		file_to_download = input("\nEnter the name of the file to download: ")
 		login['file'] = file_to_download
@@ -77,8 +79,12 @@ while True:
 		else:
 			print("\nInvalid File Name.")
 			
+		print("\nAvailable reports to view:\n")
+		for report in reports:
+			print("\t" + str(report))
 		selection = input("\nEnter the name of the next report to view (q to quit): ")
 	
+	# exit the application
 	if selection == "q":
 		break
 		
