@@ -57,6 +57,9 @@ class Report(models.Model):
     def get_files(self):
 			
         return self.files.all()
+		
+    def add_files(self, file_to_add):
+	    self.files.add(file_to_add)
 
     def display_for_fda(self):
         text = "Report: " + str(self.reportName) + "\n"

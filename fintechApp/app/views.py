@@ -19,6 +19,7 @@ from datetime import datetime
 from django.shortcuts import redirect
 from django.utils.encoding import smart_bytes, smart_text
 from itertools import chain
+from django.core.files.base import File
 
 # Create your views here.
 from .models import *
@@ -195,6 +196,36 @@ def download_file(request):
 				a = "Error."
 				
 			return HttpResponse(a)
+			
+def upload_file(request):
+	
+	if request.method == "GET":
+
+		usr = request.GET['username']
+		pwd = request.GET['password']
+		report_name = request.GET['report']
+		file_contents = request.GET['file']
+		file_name = request.GET['dirname']
+
+		user = authenticate(username=usr, password=pwd)
+
+		if user is not None:
+		
+			file_to_save = open(file_name, "w")
+			file_to_save.write(file_contents)
+			file_to_save.close()
+			file_to_save = open(file_name, "r")
+		
+			report_file = ReportFile(companyUser=user, name=file_name, file=File(file_to_save), encrypted=False)
+			report_file.save()
+			
+			print(report_file.file)
+			
+			report = Report.objects.filter(reportName=report_name, companyUser=user).first()
+			
+			report.files.add(report_file)
+			
+			return HttpResponse("hello, world")
 
 class reports(generic.ListView):
     model = Report

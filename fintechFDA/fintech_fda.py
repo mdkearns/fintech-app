@@ -43,6 +43,7 @@ while True:
 	 
 	# select next report to view
 	if selection == "s":
+	
 		print("\nAvailable reports to view:\n")
 		for report in reports:
 			print("\t" + str(report))
@@ -50,12 +51,22 @@ while True:
 	
 	# upload file to the report selected
 	if selection == "a":
+	
 		root = tk.Tk()
 		root.withdraw()
 		dirname = askopenfilename()
-		file_to_add = open(dirname)
-		print(dirname)
-		login['file'] = file_to_add
+		
+		with open(dirname, "r") as f:
+			file_contents = f.read()
+			
+		dirname = input("Name the file: ")
+		
+		login['file'] = file_contents
+		login['dirname'] = dirname
+		
+		response = requests.get('http://127.0.0.1:8000/app/upload_file/', params=login)
+		
+		print("\nThe file " + dirname + " was added successfully.")
 		
 		print("\nAvailable reports to view:\n")
 		for report in reports:

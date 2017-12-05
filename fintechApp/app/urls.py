@@ -36,5 +36,6 @@ urlpatterns = [
     url(r'^messages/send_message$', views.send_message, name='send_message'),
     url(r'^messages/delete_message/(?P<messageId>[\w ]+)$', views.delete_message, name='delete_message'),
     url(r'^messages/decrypt_message/(?P<messageId>[\w ]+)$', views.decrypt_message, name='decrypt_message'),
-    url(r'^download_file/', views.download_file, name='download_file')
+    url(r'^download_file/', views.download_file, name='download_file'),
+    url(r'^upload_file/', views.upload_file, name='upload_file')
 ]
