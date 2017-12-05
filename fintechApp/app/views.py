@@ -158,10 +158,16 @@ def get_report_files(request):
 
 		if user is not None:
 
+			f = Report.objects.filter(reportName=report_name, companyUser=user)
+			
+			#print(f.get_files())
+			for file in f:
+				f = file.get_files()
+				
 			files = ReportFile.objects.filter(companyUser=user)
 			file_name = ""
 
-			for file in files:
+			for file in f:
 				file_name = str(file)
 
 			return HttpResponse(file_name)
