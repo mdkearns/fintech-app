@@ -1,6 +1,7 @@
 import requests
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
+import getpass
 
 authenticated = False
 
@@ -8,14 +9,15 @@ while not authenticated:
 
 	print()
 	usr = input("Username: ")
-	pwd = input("Password: ")
+	pwd = getpass.getpass("Password: ")
+	#pwd = input("Password: ")
 	login = {'username':usr, 'password':pwd}
 	r = requests.get('http://127.0.0.1:8000/app/fda_authenticate', params=login)
 
 	if r.text == "You have logged in successfully!":
 		authenticated = True
 	
-	print(r.text)
+	print("\n" + r.text)
 	
 #---- create reports ----#
 #r = requests.get('http://127.0.0.1:8000/app/make_reports', params=login)
