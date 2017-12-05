@@ -69,11 +69,11 @@
             <td colspan="2">{% for file in report.files.all %}
                 {% if file.encrypted == False %}
                 <li>
-                <a href="../../{{file.file}}" download> 
+                <a href="../../{{file.file}}" download>
                     <span class="glyphicon glyphicon-download-alt">
                 </a>
                 &nbsp;
-                <a href="../../{{file.file}}" target="_blank"> 
+                <a href="../../{{file.file}}" target="_blank">
                     <span class="glyphicon glyphicon-eye-open">
                 </a>
                 &nbsp;&nbsp;
@@ -101,6 +101,18 @@
           </tr>
         </tbody>
       </table>
+      <center><h2> Comments </h2></center>
+      <table style="margin-left:85px; " >
+        <Col width="50">
+        <col width="600">
+        {% for comment in report.comments.all %}
+            <tr style="padding: 10px">
+                <td style="padding: 10px"><span style="font-weight:bold">{{ comment.userName}}:&nbsp; </span></td>
+                <td style="padding: 10px">{{ comment.text}}</td>
+        {% endfor %}
+      </table>
+        <br>
+        <a href="{% url 'add_comment' report.id %}">Add Comment</a>
         <br><br>
         <a href="{% url 'reports'%}?next={{request.path}}">Return to Reports</a>
         <div style="margin-left:20px;margin-top:20px">

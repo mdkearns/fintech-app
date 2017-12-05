@@ -23,6 +23,12 @@ class ReportFile(models.Model):
     def __str__(self):
         return self.name
 
+class Comment(models.Model):
+    userName = models.CharField(max_length=50)
+    text = models.TextField(max_length=100)
+
+    def __str__(self):
+        return self.text
 
 class Report(models.Model):
     reportName = models.CharField(max_length=50, default="NO_NAME")
@@ -40,6 +46,7 @@ class Report(models.Model):
     accessType = models.CharField(max_length=7, choices=(("private", "private"), ("public", "public")), default="public")
     files = models.ManyToManyField(ReportFile, blank=True)
     stars = models.ManyToManyField(User, blank=True, related_name="starred")
+    comments = models.ManyToManyField(Comment, blank=True)
 
     def __str__(self):
         return self.reportName
@@ -128,6 +135,13 @@ class ReportForm2(ModelForm):
     class Meta:
         model = Report
         fields = '__all__'
+        request = None
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+        exclude = ["userName"]
         request = None
 
 class ReportFileForm(ModelForm):

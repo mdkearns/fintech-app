@@ -581,3 +581,20 @@ def add_report_to_group(request, groupId):
     else:
         form = AddReportToGroupForm(request=request)
     return render(request, 'add_report_to_group.html', {'form': form})
+
+def add_comment(request, pk):
+    pk=pk
+    if request.method=="POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.userName = request.user
+            comment.save()
+            report = Report.objects.filter(id=pk).first()
+            report.comments.add(comment)
+            return HttpResponseRedirect(report.get_absolute_url())
+
+    else:
+        form = CommentForm()
+    return render(request, 'add_comment.html', {'form': form})
+

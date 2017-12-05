@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^add_new_file_to_report/(?P<reportId>\d+)$', views.addNewFileToReport, name='add_new_file_to_report'),
     url(r'^report/(?P<pk>\d+)$', views.reportDetail.as_view(), name='report_detail'),
     url(r'^report/(?P<pk>\d+)/edit_report$', views.sm_edit_report, name='edit_report'),
+    url(r'^report/(?P<pk>\d+)/add_comment/$', views.add_comment, name = 'add_comment'),
     url(r'^groups/$', views.groups.as_view(), name='groups'),
     url(r'^suspend_user/', views.suspend_user, name='suspend_user'),
     url(r'^group/(?P<pk>\d+)$', views.group_detail.as_view(), name='group_detail'),
