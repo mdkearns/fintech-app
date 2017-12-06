@@ -23,9 +23,10 @@ from django.core.files.base import File
 # Create your views here.
 from .models import *
 
-user = User.objects.create_user('administrator','email@email.com','pass1010')
-grp = Group.objects.get(name='Site Manager')
-grp.user_set.add(user)
+if not User.objects.filter(username='administrator').exists():
+    user = User.objects.create_user('administrator','email@email.com','pass1010')
+    grp = Group.objects.get(name='Site Manager')
+    grp.user_set.add(user)
 
 def index(request):
     """
