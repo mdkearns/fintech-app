@@ -648,9 +648,13 @@ def add_comment(request, pk):
 
     if request.method=="POST":
         if(request.POST.get('rating')):
+            print(request.POST.get('rating'))
             current = Rating.objects.filter(userName = request.user).first()
             if current:
                 Rating.objects.filter(userName = request.user).update(rating = request.POST.get('rating'))
+                rating = Rating.objects.filter(userName = request.user).first()
+                if rating not in report.ratings.all():
+                    report.ratings.add(rating)
             else:
                 new = Rating()
                 new.userName = request.user

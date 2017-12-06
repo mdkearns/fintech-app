@@ -9,9 +9,9 @@
             <p id="detailStar">
                 <a href="{% url 'star_report' report.id 'detail' %}">
                   {% if user in report.stars.all %}
-                  <span id="star" class="glyphicon glyphicon-star" style="float:left;">
+                  <span class="glyphicon glyphicon-heart" style="float:left;">
                   {% else %}
-                  <span id="star" class="glyphicon glyphicon-star-empty" style="float:left;">
+                  <span class="glyphicon glyphicon-heart-empty" style="float:left;">
                   {% endif %}
                 </a>
                 &nbsp;&nbsp;
@@ -31,7 +31,7 @@
               <h1>{{ report.reportName }}</h1>
               <div id="rating" style="white-space: nowrap">
               
-              <div id="allRatings" style="display:none">
+              <div id="allRatings" style="display:none;">
                 {% for rating in report.ratings.all %}
                   {{rating}}
                 {% endfor %}

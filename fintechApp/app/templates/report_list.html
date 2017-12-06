@@ -48,17 +48,23 @@
               <p style="position:absolute">
                   <a href="{% url 'star_report' report.id 'list' %}">
                     {% if user in report.stars.all %}
-                    <span id="star" class="glyphicon glyphicon-star" style="float:left;">
+                    <span class="glyphicon glyphicon-heart" style="float:left;">
                     {% else %}
-                    <span id="star" class="glyphicon glyphicon-star-empty" style="float:left;">
+                    <span class="glyphicon glyphicon-heart-empty" style="float:left;">
                     {% endif %}
                   </a>
                   &nbsp;&nbsp;
                   <span class="badge badge-notify">
                       {{ report.stars.count }}
                   </span>
-                  
                 </p>
+                
+                <!-- <p style="position:absolute; padding-left:10%;">
+                    <span id="comment" class="glyphicon glyphicon-comment" style="float:left;">
+                  <span class="badge badge-notify" style="left:-23px; top:-17px;">
+                      {{ report.comments.count }}
+                  </span>
+                </p> -->
               <h4 class="card-title">{{ report.reportName }}</h4>
               <p class="card-text">Created by: <b>{{ report.companyUser }}</b> on {{ report.timeStamp }} 
                 &nbsp; <span class="glyphicon glyphicon-file" style="float:right;">

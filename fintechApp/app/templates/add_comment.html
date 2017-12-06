@@ -1,14 +1,30 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h2>New Comment</h2>
+  <h2>New Comment/Rating</h2>
   {% if user.is_authenticated %}
 
     <form method="post">
       {% csrf_token %}
+      <a id="ratingStarLinks" onClick="rate(1)">
+          <span id="ratingStar1" class="glyphicon glyphicon-star-empty"></span>
+      </a>
+      <a id="ratingStarLinks" onClick="rate(2)">
+          <span id="ratingStar2" class="glyphicon glyphicon-star-empty"></span>
+      </a>
+      <a id="ratingStarLinks" onClick="rate(3)">
+          <span id="ratingStar3" class="glyphicon glyphicon-star-empty"></span>
+      </a>
+      <a id="ratingStarLinks" onClick="rate(4)">
+          <span id="ratingStar4" class="glyphicon glyphicon-star-empty"></span>
+      </a>
+      <a id="ratingStarLinks" onClick="rate(5)">
+          <span id="ratingStar5" class="glyphicon glyphicon-star-empty"></span>
+      </a>
+
       Add/Change Rating<br>
-      <input id="ratingInput" type="number" name="rating">
-      <br><br>
+      <input id="ratingInput" type="number" name="rating" style="display: none;">
+      <br>
       {{ form.as_p }}
       <br><br>
       <button type="submit" class="btn btn-success">Submit</button>

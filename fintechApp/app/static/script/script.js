@@ -93,3 +93,26 @@ function addRating(){
     }
     
 }
+
+
+function rate(e){
+    $("#ratingInput")[0].value = e;
+    $('#ratingStar1, #ratingStar2, #ratingStar3, #ratingStar4, #ratingStar5').removeClass().addClass("glyphicon glyphicon-star-empty");
+    switch(e){
+        case 1:
+        $('#ratingStar1').removeClass("glyphicon glyphicon-star-empty").addClass("glyphicon glyphicon-star");
+            break;
+        case 2:
+        $('#ratingStar1, #ratingStar2').removeClass("glyphicon glyphicon-star-empty").addClass("glyphicon glyphicon-star");
+            break;
+        case 3:
+        $('#ratingStar1, #ratingStar2, #ratingStar3').removeClass("glyphicon glyphicon-star-empty").addClass("glyphicon glyphicon-star");
+            break;
+        case 4:
+        $('#ratingStar1, #ratingStar2, #ratingStar3, #ratingStar4').removeClass("glyphicon glyphicon-star-empty").addClass("glyphicon glyphicon-star");
+            break;
+        case 5:
+        $('#ratingStar1, #ratingStar2, #ratingStar3, #ratingStar4, #ratingStar5').removeClass("glyphicon glyphicon-star-empty").addClass("glyphicon glyphicon-star");
+            break;
+    }
+}
