@@ -20,6 +20,15 @@
                 </span>
               </p>
               <h1>{{ report.reportName }}</h1>
+              Average Rating: <div id="rating"></div>
+              <div id="allRatings" style="display:none">
+                {% for rating in report.ratings.all %}
+                  {{rating}}
+                {% endfor %}
+            </div>
+            <script>
+              addRating();
+            </script>
             </th>
           </tr>
         </thead>
@@ -112,9 +121,9 @@
         {% endfor %}
       </table>
         <br>
-        <a href="{% url 'add_comment' report.id %}">Add Comment</a>
-        <br><br>
-        <a href="{% url 'reports'%}?next={{request.path}}">Return to Reports</a>
+        <a class="btn btn-primary" href="{% url 'reports'%}?next={{request.path}}">Return to Reports</a>
+        &nbsp;&nbsp;&nbsp;
+        <a class="btn btn-primary" href="{% url 'add_comment' report.id %}">Add Comment/Rating</a>
         <div style="margin-left:20px;margin-top:20px">
         </div>
     {% else %}

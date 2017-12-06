@@ -3,12 +3,17 @@
 {% block content %}
   <h2>New Comment</h2>
   {% if user.is_authenticated %}
+
     <form method="post">
       {% csrf_token %}
+      Add/Change Rating<br>
+      <input id="ratingInput" type="number" name="rating">
+      <br><br>
       {{ form.as_p }}
-      <button type="submit" class="btn btn-success">Post Comment</button>
+      <br><br>
+      <button type="submit" class="btn btn-success">Submit</button>
     </form>
-    <br><br><br><br>
+    <br><br>
     <a href="{% url 'reports'%}" class="btn btn-primary">Return to Reports</a>
     <div style="margin-left:20px;margin-top:20px">
     </div>

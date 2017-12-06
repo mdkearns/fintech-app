@@ -78,3 +78,13 @@ function addEncCount(a){
         encFileCount++;
     }
 }
+
+function addRating(){
+    var ratings = $("#allRatings")[0].innerHTML.replace(/\s/g,'').split("");
+    var total = 0;
+    ratings.forEach(function(x){
+        total += parseInt(x);
+    });
+    total = (total/ratings.length);
+    $("#rating")[0].innerHTML = total;
+}

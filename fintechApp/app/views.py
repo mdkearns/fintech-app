@@ -641,15 +641,28 @@ def add_report_to_group(request, groupId):
         form = AddReportToGroupForm(request=request)
     return render(request, 'add_report_to_group.html', {'form': form})
 
+
 def add_comment(request, pk):
     pk=pk
+    report = Report.objects.filter(id=pk).first()
+
     if request.method=="POST":
+        if(request.POST.get('rating')):
+            current = Rating.objects.filter(userName = request.user).first()
+            if current:
+                Rating.objects.filter(userName = request.user).update(rating = request.POST.get('rating'))
+            else:
+                new = Rating()
+                new.userName = request.user
+                new.rating = request.POST.get('rating')
+                new.save()
+                report.ratings.add(new)
+
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.userName = request.user
             comment.save()
-            report = Report.objects.filter(id=pk).first()
             report.comments.add(comment)
             return HttpResponseRedirect(report.get_absolute_url())
 

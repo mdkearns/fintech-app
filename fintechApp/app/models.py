@@ -13,6 +13,7 @@ from uuid import uuid4
 import nacl.utils
 from nacl.public import PrivateKey, SealedBox
 from datetime import datetime
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class ReportFile(models.Model):
     companyUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
@@ -27,11 +28,18 @@ class ReportFile(models.Model):
         return self.name
 
 class Comment(models.Model):
-    userName = models.CharField(max_length=50)
+    userName = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     text = models.TextField(max_length=100)
 
     def __str__(self):
         return self.text
+
+class Rating(models.Model):
+    userName = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    rating = models.IntegerField(default=1, validators=[MaxValueValidator(5), MinValueValidator(1)])
+
+    def __str__(self):
+        return str(self.rating)
 
 class Report(models.Model):
     reportName = models.CharField(max_length=50, default="NO_NAME")
@@ -50,6 +58,7 @@ class Report(models.Model):
     files = models.ManyToManyField(ReportFile, blank=True)
     stars = models.ManyToManyField(User, blank=True, related_name="starred")
     comments = models.ManyToManyField(Comment, blank=True)
+    ratings = models.ManyToManyField(Rating, blank=True)
 
     def __str__(self):
         return self.reportName
