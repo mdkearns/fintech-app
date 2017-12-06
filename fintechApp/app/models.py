@@ -144,7 +144,7 @@ class ReportForm(ModelForm):
         model = Report
         # fields = ['reportName', 'companyUser', 'timeStamp', 'companyName','companyPhone','companyLocation','companyCountry','sector', 'industry','accessType']
         fields = '__all__'
-        exclude = ["companyUser", "timeStamp","stars"]
+        exclude = ["companyUser", "timeStamp","stars","comments","ratings"]
         request = None
         files = forms.ModelMultipleChoiceField(queryset=None)
 
@@ -157,6 +157,7 @@ class ReportForm2(ModelForm):
     class Meta:
         model = Report
         fields = '__all__'
+        exclude = ["stars","comments","ratings"]
         request = None
 
 class CommentForm(ModelForm):
