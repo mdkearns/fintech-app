@@ -662,6 +662,7 @@ def add_comment(request, pk):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.userName = request.user
+            comment.timeStamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
             comment.save()
             report.comments.add(comment)
             return HttpResponseRedirect(report.get_absolute_url())
@@ -670,3 +671,9 @@ def add_comment(request, pk):
         form = CommentForm()
     return render(request, 'add_comment.html', {'form': form})
 
+
+def view_comments(request, pk):
+    pk=pk
+    report = Report.objects.filter(id=pk).first()
+
+    return render(request, 'view_comments.html', {'report': report})

@@ -30,6 +30,7 @@ class ReportFile(models.Model):
 class Comment(models.Model):
     userName = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     text = models.TextField(max_length=100)
+    timeStamp = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.text
@@ -162,7 +163,7 @@ class CommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = '__all__'
-        exclude = ["userName"]
+        exclude = ["userName","timeStamp"]
         request = None
 
 class ReportFileForm(ModelForm):

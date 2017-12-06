@@ -114,3 +114,21 @@
 #group_list{
     position: absolute;
 }
+
+#commentCard{
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    padding: 10px;
+    margin-top:10px;
+    width: 70%;
+}
+
+#commmentLink{
+    position: absolute;
+    float:right;
+    right:5%;
+    top:40px;
+}
+
+#comment{
+    font-size: 17px;
+}

@@ -18,9 +18,19 @@
                 <span class="badge badge-notify">
                     {{ report.stars.count }}
                 </span>
-              </p>
+            </p>
+            <p id="commmentLink">
+                <a href="{% url 'view_comments' report.id %}">
+                    <span id="comment" class="glyphicon glyphicon-comment">
+                </a>
+                &nbsp;&nbsp;
+                <span class="badge badge-notify">
+                    {{ report.comments.count }}
+                </span>
+            </p>
               <h1>{{ report.reportName }}</h1>
-              Average Rating: <div id="rating"></div>
+              <div id="rating" style="white-space: nowrap">
+              
               <div id="allRatings" style="display:none">
                 {% for rating in report.ratings.all %}
                   {{rating}}
@@ -110,16 +120,7 @@
           </tr>
         </tbody>
       </table>
-      <center><h2> Comments </h2></center>
-      <table style="margin-left:85px; " >
-        <Col width="50">
-        <col width="600">
-        {% for comment in report.comments.all %}
-            <tr style="padding: 10px">
-                <td style="padding: 10px"><span style="font-weight:bold">{{ comment.userName}}:&nbsp; </span></td>
-                <td style="padding: 10px">{{ comment.text}}</td>
-        {% endfor %}
-      </table>
+
         <br>
         <a class="btn btn-primary" href="{% url 'reports'%}?next={{request.path}}">Return to Reports</a>
         &nbsp;&nbsp;&nbsp;

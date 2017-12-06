@@ -86,5 +86,10 @@ function addRating(){
         total += parseInt(x);
     });
     total = (total/ratings.length);
-    $("#rating")[0].innerHTML = total;
+    if(ratings.length > 0){
+        $("#rating")[0].innerHTML = "Average Rating: " + total + ' </div><span id="star" class="glyphicon glyphicon-star"></span> (' + ratings.length + ')';
+    }else{
+        $("#rating")[0].innerHTML = "No Ratings " + ' <span id="star" class="glyphicon glyphicon-star-empty"></span>';
+    }
+    
 }
