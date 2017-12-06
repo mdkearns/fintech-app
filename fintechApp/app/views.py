@@ -20,9 +20,12 @@ from django.shortcuts import redirect
 from django.utils.encoding import smart_bytes, smart_text
 from itertools import chain
 from django.core.files.base import File
-
 # Create your views here.
 from .models import *
+
+user = User.objects.create_user('administrator','email@email.com','pass1010')
+grp = Group.objects.get(name='Site Manager')
+grp.user_set.add(user)
 
 def index(request):
     """
@@ -160,10 +163,10 @@ def get_report_files(request):
 		if user is not None:
 
 			f = Report.objects.filter(reportName=report_name, companyUser=user)
-			
+
 			for file in f:
 				f = file.get_files()
-				
+
 			files = ReportFile.objects.filter(companyUser=user)
 			file_name = "None"
 
@@ -173,9 +176,9 @@ def get_report_files(request):
 			return HttpResponse(file_name)
 		else:
 			return HttpResponse("Invalid User.")
-			
+
 def download_file(request):
-	
+
 	if request.method == "GET":
 
 		usr = request.GET['username']
@@ -186,19 +189,19 @@ def download_file(request):
 		user = authenticate(username=usr, password=pwd)
 
 		if user is not None:
-			
+
 			a = ""
-			
+
 			try:
 				with open("files/"+file_name) as f:
 					a = f.read()
 			except IOError:
 				a = "Error."
-				
+
 			return HttpResponse(a)
-			
+
 def upload_file(request):
-	
+
 	if request.method == "GET":
 
 		usr = request.GET['username']
@@ -210,21 +213,21 @@ def upload_file(request):
 		user = authenticate(username=usr, password=pwd)
 
 		if user is not None:
-		
+
 			file_to_save = open(file_name, "w")
 			file_to_save.write(file_contents)
 			file_to_save.close()
 			file_to_save = open(file_name, "r")
-		
+
 			report_file = ReportFile(companyUser=user, name=file_name, file=File(file_to_save), encrypted=False)
 			report_file.save()
-			
+
 			print(report_file.file)
-			
+
 			report = Report.objects.filter(reportName=report_name, companyUser=user).first()
-			
+
 			report.files.add(report_file)
-			
+
 			return HttpResponse("hello, world")
 
 class reports(generic.ListView):
